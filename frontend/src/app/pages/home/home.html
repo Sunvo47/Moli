@@ -57,18 +57,14 @@
 
     <!-- Trending Now -->
     <section class="movie-section trending-section">
-
       <div class="section-heading">
         <h2>Trending Now</h2>
         <a routerLink="/movies">View All</a>
       </div>
 
       @if (trendingMovies.length) {
-
         <div class="trending-wrapper">
-
           <div class="trending-track">
-
             @for (movie of trendingMovies; track movie.id) {
               <a
                 class="movie-card trending-card"
@@ -79,7 +75,6 @@
                     [src]="movie.poster"
                     [alt]="movie.title"
                   />
-
                   <div class="poster-overlay">
                     <span>▶</span>
                   </div>
@@ -87,7 +82,6 @@
 
                 <div class="movie-info">
                   <h3>{{ movie.title }}</h3>
-
                   <div class="movie-meta">
                     <span>★ {{ movie.rating }}</span>
                     <span>{{ movie.genre }}</span>
@@ -96,7 +90,7 @@
               </a>
             }
 
-            @for (movie of trendingMovies; track 'duplicate-' + movie.id) {
+            @for (movie of trendingMovies; track 'loop-' + movie.id) {
               <a
                 class="movie-card trending-card"
                 [routerLink]="['/movies', movie.id]"
@@ -108,7 +102,6 @@
                     [src]="movie.poster"
                     [alt]="movie.title"
                   />
-
                   <div class="poster-overlay">
                     <span>▶</span>
                   </div>
@@ -116,7 +109,6 @@
 
                 <div class="movie-info">
                   <h3>{{ movie.title }}</h3>
-
                   <div class="movie-meta">
                     <span>★ {{ movie.rating }}</span>
                     <span>{{ movie.genre }}</span>
@@ -124,22 +116,17 @@
                 </div>
               </a>
             }
-
           </div>
-
         </div>
-
       } @else {
         <div class="empty-state">
           No movies available.
         </div>
       }
-
     </section>
 
     <!-- New Releases -->
-    <section class="movie-section">
-
+    <section class="movie-section new-releases-section">
       <div class="section-heading">
         <h2>New Releases</h2>
         <a routerLink="/movies">View All</a>
@@ -157,7 +144,6 @@
                   [src]="movie.poster"
                   [alt]="movie.title"
                 />
-
                 <div class="poster-overlay">
                   <span>▶</span>
                 </div>
@@ -165,7 +151,6 @@
 
               <div class="movie-info">
                 <h3>{{ movie.title }}</h3>
-
                 <div class="movie-meta">
                   <span>★ {{ movie.rating }}</span>
                   <span>{{ movie.genre }}</span>
@@ -179,9 +164,7 @@
           No new releases available.
         </div>
       }
-
     </section>
-
   }
 
   @if (!loading && !error && !featuredMovie) {
