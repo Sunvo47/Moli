@@ -97,8 +97,7 @@ updatedAt?: string;
 providedIn: 'root'
 })
 export class ApiService {
-private baseUrl = 'http://localhost:3000/api';
-
+  private baseUrl = 'https://moli-backend-bwxe.onrender.com/api';
 constructor(private http: HttpClient) {}
 
 private authHeaders(): HttpHeaders {
