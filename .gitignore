@@ -27,3 +27,12 @@ pnpm-debug.log*
 
 # Testing / coverage
 coverage/
+
+# Local AI / coding tool files
+backend/.agents/
+backend/.claude/
+backend/.cursor/
+backend/.devin/
+
+# Local backup files
+*.backup
