@@ -1,0 +1,369 @@
+<section class="detail-page">
+
+@if (loading) { <div class="loading-screen"> <div class="loader"></div> <p>Loading movie...</p> </div>
+}
+
+@if (!loading && error && !movie) { <div class="state-box error"> <div class="state-icon">!</div>
+
+
+  <h2>Something went wrong</h2>
+
+  <p>{{ error }}</p>
+
+  <a routerLink="/movies" class="back-btn">
+    Back to Movies
+  </a>
+</div>
+
+
+}
+
+@if (!loading && movie) {
+
+
+<!-- HERO -->
+<section
+  class="movie-hero"
+  [style.background-image]="
+    'linear-gradient(90deg, rgba(5, 8, 24, 1) 0%, rgba(5, 8, 24, 0.92) 28%, rgba(5, 8, 24, 0.68) 55%, rgba(5, 8, 24, 0.15) 100%), linear-gradient(0deg, #050816 0%, transparent 35%), url(' + getBackdropUrl() + ')'
+  "
+>
+
+  <div class="hero-content">
+
+    <a routerLink="/movies" class="back-link">
+      <span>←</span>
+      Back to Movies
+    </a>
+
+    <h1>{{ movie.title }}</h1>
+
+    <div class="movie-meta">
+
+      <span class="rating">
+        ★ {{ movie.rating }}
+      </span>
+
+      <span class="meta-dot"></span>
+
+      <span>
+        {{ movie.genre }}
+      </span>
+
+      <span class="meta-dot"></span>
+
+      <span>
+        {{ formatDuration(movie.duration) }}
+      </span>
+
+      <span class="meta-dot"></span>
+
+      <span>
+        {{ movie.viewCount | number }} views
+      </span>
+
+    </div>
+
+    <p class="description">
+      {{ movie.description }}
+    </p>
+
+    <div class="actions">
+
+      <a
+        class="watch-btn"
+        [routerLink]="['/watch', movie.id]"
+      >
+        <span class="play-icon">▶</span>
+        Watch Now
+      </a>
+
+      <button
+        type="button"
+        class="list-btn"
+        [class.liked]="liked"
+        [disabled]="likeLoading"
+        (click)="toggleLike()"
+      >
+        <span class="list-icon">
+          {{ liked ? '✓' : '+' }}
+        </span>
+
+        {{ liked ? 'My List' : 'Add to My List' }}
+      </button>
+
+      <button
+        type="button"
+        class="rent-btn"
+        [disabled]="rentLoading"
+        (click)="rentMovie()"
+      >
+        {{
+          rentLoading
+            ? 'Renting...'
+            : 'Rent for ' + (movie.rentalPrice | number) + ' THB'
+        }}
+      </button>
+
+    </div>
+
+    @if (error) {
+      <p class="inline-error">
+        {{ error }}
+      </p>
+    }
+
+    @if (rentalMessage) {
+      <p class="rental-message">
+        {{ rentalMessage }}
+      </p>
+    }
+
+  </div>
+
+</section>
+
+
+<!-- MAIN CONTENT -->
+<main class="movie-content">
+
+  <!-- POSTER -->
+  <aside class="poster-column">
+
+    <div class="poster-card">
+
+      <img
+        [src]="getImageUrl(movie.poster)"
+        [alt]="movie.title"
+        class="poster"
+      >
+
+    </div>
+
+    <div class="movie-type">
+      {{ movie.type }}
+    </div>
+
+    <div class="poster-caption">
+      <span>Now watching</span>
+      <strong>{{ movie.title }}</strong>
+    </div>
+
+  </aside>
+
+
+  <!-- DETAILS -->
+  <div class="details-column">
+
+    <!-- PREVIEW -->
+    <section class="preview-section">
+
+      <div class="section-heading">
+
+        <div>
+          <span class="section-kicker">PREVIEW</span>
+          <h2>Watch this title</h2>
+        </div>
+
+      </div>
+
+      <div
+        class="preview-card"
+        [style.background-image]="
+          'linear-gradient(90deg, rgba(5, 8, 24, 0.96), rgba(5, 8, 24, 0.42)), url(' + getBackdropUrl() + ')'
+        "
+      >
+
+        <div class="preview-content">
+
+          <div class="preview-play">
+            ▶
+          </div>
+
+          <div>
+
+            <span class="preview-label">
+              MOLI PREVIEW
+            </span>
+
+            <h3>
+              Ready to watch {{ movie.title }}?
+            </h3>
+
+            <p>
+              Start watching this title and enjoy the full experience.
+            </p>
+
+            <a
+              class="preview-btn"
+              [routerLink]="['/watch', movie.id]"
+            >
+              Watch Now
+            </a>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ABOUT -->
+    <section class="about-section">
+
+      <div class="section-heading">
+
+        <div>
+          <span class="section-kicker">ABOUT THIS TITLE</span>
+          <h2>{{ movie.title }}</h2>
+        </div>
+
+      </div>
+
+      <p class="about-description">
+        {{ movie.description }}
+      </p>
+
+    </section>
+
+
+    <!-- INFORMATION -->
+    <section class="information-section">
+
+      <div class="section-heading">
+
+        <div>
+          <span class="section-kicker">DETAILS</span>
+          <h2>Movie Information</h2>
+        </div>
+
+      </div>
+
+      <div class="info-grid">
+
+        <div class="info-item">
+
+          <span class="info-label">
+            Release Date
+          </span>
+
+          <strong>
+            {{ formatReleaseDate(movie.releaseDate) }}
+          </strong>
+
+        </div>
+
+        <div class="info-item">
+
+          <span class="info-label">
+            Genre
+          </span>
+
+          <strong>
+            {{ movie.genre }}
+          </strong>
+
+        </div>
+
+        <div class="info-item">
+
+          <span class="info-label">
+            Duration
+          </span>
+
+          <strong>
+            {{ formatDuration(movie.duration) }}
+          </strong>
+
+        </div>
+
+        <div class="info-item">
+
+          <span class="info-label">
+            Rating
+          </span>
+
+          <strong class="rating-value">
+            ★ {{ movie.rating }}
+          </strong>
+
+        </div>
+
+        <div class="info-item">
+
+          <span class="info-label">
+            Views
+          </span>
+
+          <strong>
+            {{ movie.viewCount | number }}
+          </strong>
+
+        </div>
+
+        <div class="info-item">
+
+          <span class="info-label">
+            Likes
+          </span>
+
+          <strong>
+            {{ movie.likeCount | number }}
+          </strong>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- RENTAL -->
+    <section class="rental-section">
+
+      <div class="rental-content">
+
+        <div>
+
+          <span class="section-kicker">
+            RENTAL
+          </span>
+
+          <h2>
+            Watch when you want
+          </h2>
+
+          <p>
+            Rent this title for {{ movie.rentalDuration }} hours
+            and start watching whenever you're ready.
+          </p>
+
+        </div>
+
+        <button
+          type="button"
+          class="rental-action"
+          [disabled]="rentLoading"
+          (click)="rentMovie()"
+        >
+          {{
+            rentLoading
+              ? 'Renting...'
+              : 'Rent for ' + (movie.rentalPrice | number) + ' THB'
+          }}
+        </button>
+
+      </div>
+
+    </section>
+
+  </div>
+
+</main>
+
+
+}
+
+</section>

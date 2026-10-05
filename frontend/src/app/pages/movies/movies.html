@@ -1,0 +1,258 @@
+<section class="movies-page"> <header class="movies-header"> <div class="header-content"> <span class="eyebrow">MOLI COLLECTION</span>
+  <h1>Movies</h1>
+
+  <p>
+    Explore the collection and find your next movie.
+  </p>
+</div>
+</header> <section class="movies-toolbar">
+<form
+  class="search-form"
+  (ngSubmit)="applyFilters()"
+>
+  <div class="search-input-wrapper">
+    <span class="search-icon">⌕</span>
+
+    <input
+      type="search"
+      name="search"
+      [(ngModel)]="searchText"
+      placeholder="Search movies..."
+      autocomplete="off"
+    >
+  </div>
+
+  <button
+    type="submit"
+    class="search-btn"
+  >
+    Search
+  </button>
+</form>
+
+<div class="filter-area">
+
+  <label class="filter-control">
+    <span>Genre</span>
+
+    <select
+      name="genre"
+      [(ngModel)]="selectedGenre"
+      (change)="applyFilters()"
+    >
+      @for (genre of genres; track genre) {
+        <option [value]="genre">
+          {{ genre }}
+        </option>
+      }
+    </select>
+  </label>
+
+  <label class="filter-control">
+    <span>Type</span>
+
+    <select
+      name="type"
+      [(ngModel)]="selectedType"
+      (change)="applyFilters()"
+    >
+      @for (type of types; track type) {
+        <option [value]="type">
+          {{ type }}
+        </option>
+      }
+    </select>
+  </label>
+
+  @if (
+    searchText ||
+    selectedGenre !== 'All' ||
+    selectedType !== 'All'
+  ) {
+    <button
+      type="button"
+      class="clear-btn"
+      (click)="clearFilters()"
+    >
+      Clear filters
+    </button>
+  }
+
+</div>
+</section>
+@if (loading) {
+<div class="state-box">
+<div class="loader"></div>
+<p>Loading movies...</p>
+</div>
+}
+@if (!loading && error) {
+<div class="state-box error">
+<div class="state-icon">!</div>
+  <h2>Something went wrong</h2>
+
+  <p>{{ error }}</p>
+
+  <button
+    type="button"
+    class="retry-btn"
+    (click)="loadMovies()"
+  >
+    Try Again
+  </button>
+</div>
+}
+@if (!loading && !error && !movies.length) {
+<div class="state-box empty">
+<div class="state-icon">⌕</div>
+  <h2>No movies found</h2>
+
+  <p>
+    Try another title or choose a different genre.
+  </p>
+
+  <button
+    type="button"
+    class="retry-btn"
+    (click)="clearFilters()"
+  >
+    View All Movies
+  </button>
+</div>
+}
+@if (!loading && !error && movies.length) {
+<section class="results-section">
+
+  <div class="results-heading">
+    <div>
+      <span class="results-label">
+        MOLI LIBRARY
+      </span>
+
+      <h2>
+        {{ movies.length }}
+        {{ movies.length === 1 ? 'Movie' : 'Movies' }}
+      </h2>
+    </div>
+
+    @if (
+      searchText ||
+      selectedGenre !== 'All' ||
+      selectedType !== 'All'
+    ) {
+      <span class="filter-active">
+        Filtered
+      </span>
+    }
+  </div>
+
+  <div class="movie-grid">
+
+    @for (movie of movies; track movie.id) {
+
+      <a
+        class="movie-card"
+        [routerLink]="['/movies', movie.id]"
+      >
+
+        <div class="poster-wrapper">
+
+          <img
+            [src]="getImageUrl(movie.poster)"
+            [alt]="movie.title"
+            loading="lazy"
+            decoding="async"
+          >
+
+          <div class="poster-overlay">
+            <span class="play-icon">▶</span>
+            <span>View Details</span>
+          </div>
+
+          <span class="rating">
+            ★ {{ movie.rating }}
+          </span>
+
+          <button
+            type="button"
+            class="like-btn"
+            [class.liked]="isLiked(movie.id)"
+            [class.loading]="likeLoadingIds.has(movie.id)"
+            [attr.aria-label]="
+              isLiked(movie.id)
+                ? 'Unlike ' + movie.title
+                : 'Like ' + movie.title
+            "
+            (click)="toggleLike($event, movie)"
+          >
+            <span>
+              {{ isLiked(movie.id) ? '♥' : '♡' }}
+            </span>
+          </button>
+
+        </div>
+
+        <div class="movie-info">
+
+          <div class="movie-title-row">
+
+            <h3>
+              {{ movie.title }}
+            </h3>
+
+            <span class="movie-type">
+              {{ movie.type }}
+            </span>
+
+          </div>
+
+          <div class="movie-meta">
+
+            <span>
+              {{ movie.genre }}
+            </span>
+
+            <span class="meta-dot">•</span>
+
+            <span>
+              {{ formatDuration(movie.duration) }}
+            </span>
+
+            <span class="meta-dot">•</span>
+
+            <span>
+              {{ movie.viewCount }} views
+            </span>
+
+          </div>
+
+          <p>
+            {{ movie.description }}
+          </p>
+
+          <div class="movie-footer">
+
+            <span class="rental-price">
+              {{ movie.rentalPrice }} THB
+            </span>
+
+            <span
+              class="like-count"
+              [class.liked-count]="isLiked(movie.id)"
+            >
+              ♥ {{ movie.likeCount }}
+            </span>
+
+          </div>
+
+        </div>
+
+      </a>
+
+    }
+
+  </div>
+
+</section>
+}
+</section>

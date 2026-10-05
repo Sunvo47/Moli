@@ -1,0 +1,142 @@
+<section class="watch-page">
+
+  @if (loading) {
+    <div class="state-box">
+      <div class="loader"></div>
+      <p>Loading movie...</p>
+    </div>
+  }
+
+  @if (!loading && error && !movie) {
+    <div class="state-box error">
+      <h2>Something went wrong</h2>
+      <p>{{ error }}</p>
+      <a routerLink="/movies" class="back-btn">Back to Movies</a>
+    </div>
+  }
+
+  @if (!loading && movie) {
+
+    @if (checkingRental) {
+      <div class="state-box">
+        <div class="loader"></div>
+        <p>Checking your rental...</p>
+      </div>
+    }
+
+    @if (!checkingRental && canWatch) {
+      <section class="player-section">
+
+        <div class="player-wrapper">
+          <video
+            class="demo-video"
+            controls
+            preload="metadata"
+            (play)="onPlay()"
+          >
+            <source
+              src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+              type="video/mp4"
+            />
+            Your browser does not support video playback.
+          </video>
+        </div>
+
+        <div class="watch-info">
+
+          <div class="movie-heading">
+            <div>
+              <span class="eyebrow">NOW PLAYING</span>
+              <h1>{{ movie.title }}</h1>
+              <p>{{ movie.description }}</p>
+            </div>
+
+            <a
+              [routerLink]="['/movies', movie.id]"
+              class="back-link"
+            >
+              ← Movie Details
+            </a>
+          </div>
+
+          <div class="rental-status">
+            <span class="status-dot"></span>
+
+            <div>
+              <strong>Rental Active</strong>
+
+              @if (rentalExpiresAt) {
+                <span>
+                  Access until {{ formatExpiry(rentalExpiresAt) }}
+                </span>
+              }
+            </div>
+          </div>
+
+          @if (recordingWatch) {
+            <p class="watch-status">
+              Recording watch history...
+            </p>
+          }
+
+          @if (watchedThisSession) {
+            <p class="watch-status success">
+              Watch history recorded · View count updated
+            </p>
+          }
+
+        </div>
+
+      </section>
+    }
+
+    @if (!checkingRental && !canWatch) {
+      <section class="rental-required">
+
+        <div
+          class="rental-backdrop"
+          [style.background-image]="
+            'linear-gradient(rgba(5, 8, 24, 0.72), rgba(5, 8, 24, 0.98)), url('
+            + getImageUrl(movie.backdrop)
+            + ')'
+          "
+        ></div>
+
+        <div class="rental-content">
+
+          <div class="lock-icon">🔒</div>
+
+          <span class="eyebrow">RENTAL REQUIRED</span>
+
+          <h1>{{ movie.title }}</h1>
+
+          <p>
+            You need an active rental to watch this movie.
+          </p>
+
+          <div class="rental-actions">
+
+            <a
+              [routerLink]="['/movies', movie.id]"
+              class="rent-btn"
+            >
+              Go to Movie Details
+            </a>
+
+            <a
+              routerLink="/movies"
+              class="secondary-btn"
+            >
+              Back to Movies
+            </a>
+
+          </div>
+
+        </div>
+
+      </section>
+    }
+
+  }
+
+</section>

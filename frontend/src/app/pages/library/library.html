@@ -1,0 +1,514 @@
+<div class="library-page">
+<div class="library-header">
+<div>
+
+  <p class="eyebrow">MY LIBRARY</p>
+
+  <h1>My Library</h1>
+
+  <p class="library-subtitle">
+
+    Your movies, rentals and watch history in one place.
+
+  </p>
+
+</div>
+</div>
+@if (!hasToken()) {
+<div class="empty-state">
+
+  <h2>Sign in to view your library</h2>
+
+  <p>
+
+    Log in to see your liked movies, rentals and watch history.
+
+  </p>
+
+  <a routerLink="/login" class="primary-button">
+
+    Sign In
+
+  </a>
+
+</div>
+} @else if (error) {
+<div class="error-state">
+
+  <h2>Something went wrong</h2>
+
+  <p>{{ error }}</p>
+
+  <button
+
+    type="button"
+
+    class="primary-button"
+
+    (click)="loadLibrary()"
+
+  >
+
+    Try Again
+
+  </button>
+
+</div>
+} @else {
+<!-- ========================= -->
+<!-- RENTALS -->
+<!-- ========================= -->
+
+<section class="library-section">
+
+  <div class="section-heading">
+
+    <div>
+
+      <p class="section-label">WATCH ACCESS</p>
+
+      <h2>My Rentals</h2>
+
+    </div>
+
+    @if (rentals.length > 0) {
+
+      <span class="section-count">
+
+        {{ rentals.length }}
+
+        {{ rentals.length === 1 ? 'rental' : 'rentals' }}
+
+      </span>
+
+    }
+
+  </div>
+
+  @if (rentals.length > 0) {
+
+    <div class="rental-list">
+
+      @for (
+
+        rental of rentals;
+
+        track trackByRental($index, rental)
+
+      ) {
+
+        <div class="rental-card">
+
+          <div class="rental-poster">
+
+            <img
+
+              [src]="getImageUrl(rental.movie.poster)"
+
+              [alt]="rental.movie.title"
+
+            />
+
+          </div>
+
+          <div class="rental-content">
+
+            <div class="rental-top">
+
+              <div>
+
+                <h3>{{ rental.movie.title }}</h3>
+
+                <div class="movie-meta">
+
+                  <span>{{ rental.movie.genre }}</span>
+
+                  <span>•</span>
+
+                  <span>★ {{ rental.movie.rating }}</span>
+
+                </div>
+
+              </div>
+
+              <span
+
+                class="rental-status"
+
+                [class.active]="isRentalActive(rental)"
+
+                [class.expired]="!isRentalActive(rental)"
+
+              >
+
+                {{ getRentalStatus(rental) }}
+
+              </span>
+
+            </div>
+
+            <div class="rental-details">
+
+              <div>
+
+                <span class="detail-label">Rented</span>
+
+                <span>
+
+                  {{ rental.rentedAt | date:'dd MMM yyyy, HH:mm' }}
+
+                </span>
+
+              </div>
+
+              <div>
+
+                <span class="detail-label">Expires</span>
+
+                <span>
+
+                  {{ rental.expiresAt | date:'dd MMM yyyy, HH:mm' }}
+
+                </span>
+
+              </div>
+
+              <div>
+
+                <span class="detail-label">Time left</span>
+
+                <span>
+
+                  {{ getRemainingTime(rental) }}
+
+                </span>
+
+              </div>
+
+            </div>
+
+            <div class="rental-actions">
+
+              @if (isRentalActive(rental)) {
+
+                <a
+
+                  [routerLink]="['/watch', rental.movie.id]"
+
+                  class="primary-button"
+
+                >
+
+                  Watch Now
+
+                </a>
+
+              } @else {
+
+                <a
+
+                  [routerLink]="['/movies', rental.movie.id]"
+
+                  class="secondary-button"
+
+                >
+
+                  Rent Again
+
+                </a>
+
+              }
+
+            </div>
+
+          </div>
+
+        </div>
+
+      }
+
+    </div>
+
+  } @else {
+
+    <div class="section-empty">
+
+      <div class="empty-icon">▣</div>
+
+      <h3>No active rentals</h3>
+
+      <p>
+
+        Movies you rent will appear here.
+
+      </p>
+
+      <a
+
+        routerLink="/movies"
+
+        class="secondary-button"
+
+      >
+
+        Browse Movies
+
+      </a>
+
+    </div>
+
+  }
+
+</section>
+
+<!-- ========================= -->
+<!-- WATCH HISTORY -->
+<!-- ========================= -->
+
+<section class="library-section">
+
+  <div class="section-heading">
+
+    <div>
+
+      <p class="section-label">RECENTLY WATCHED</p>
+
+      <h2>Watch History</h2>
+
+    </div>
+
+    @if (watchHistory.length > 0) {
+
+      <span class="section-count">
+
+        {{ watchHistory.length }}
+
+        {{ watchHistory.length === 1 ? 'movie' : 'movies' }}
+
+      </span>
+
+    }
+
+  </div>
+
+  @if (watchHistory.length > 0) {
+
+    <div class="history-list">
+
+      @for (
+
+        history of watchHistory;
+
+        track trackByHistory($index, history)
+
+      ) {
+
+        <a
+
+          class="history-card"
+
+          [routerLink]="['/movies', history.movie.id]"
+
+        >
+
+          <div class="history-poster">
+
+            <img
+
+              [src]="getImageUrl(history.movie.poster)"
+
+              [alt]="history.movie.title"
+
+            />
+
+          </div>
+
+          <div class="history-content">
+
+            <h3>{{ history.movie.title }}</h3>
+
+            <div class="movie-meta">
+
+              <span>{{ history.movie.genre }}</span>
+
+              <span>•</span>
+
+              <span>★ {{ history.movie.rating }}</span>
+
+            </div>
+
+            <p class="watched-time">
+
+              Watched
+
+              {{ history.watchedAt | date:'dd MMM yyyy, HH:mm' }}
+
+            </p>
+
+          </div>
+
+          <span class="history-arrow">›</span>
+
+        </a>
+
+      }
+
+    </div>
+
+  } @else {
+
+    <div class="section-empty">
+
+      <div class="empty-icon">◷</div>
+
+      <h3>No watch history</h3>
+
+      <p>
+
+        Movies you watch will appear here.
+
+      </p>
+
+      <a
+
+        routerLink="/movies"
+
+        class="secondary-button"
+
+      >
+
+        Start Watching
+
+      </a>
+
+    </div>
+
+  }
+
+</section>
+
+<!-- ========================= -->
+<!-- LIKED MOVIES -->
+<!-- ========================= -->
+
+<section class="library-section">
+
+  <div class="section-heading">
+
+    <div>
+
+      <p class="section-label">FAVORITES</p>
+
+      <h2>Liked Movies</h2>
+
+    </div>
+
+    @if (likedMovies.length > 0) {
+
+      <span class="section-count">
+
+        {{ likedMovies.length }}
+
+        {{ likedMovies.length === 1 ? 'movie' : 'movies' }}
+
+      </span>
+
+    }
+
+  </div>
+
+  @if (likedMovies.length > 0) {
+
+    <div class="movie-grid">
+
+      @for (
+
+        like of likedMovies;
+
+        track trackByLikedMovie($index, like)
+
+      ) {
+
+        @let movie = getLikedMovie(like);
+
+        <a
+
+          class="movie-card"
+
+          [routerLink]="['/movies', movie.id]"
+
+        >
+
+          <div class="movie-poster">
+
+            <img
+
+              [src]="getImageUrl(movie.poster)"
+
+              [alt]="movie.title"
+
+            />
+
+            <div class="movie-overlay">
+
+              <span class="play-icon">▶</span>
+
+            </div>
+
+          </div>
+
+          <div class="movie-info">
+
+            <h3>{{ movie.title }}</h3>
+
+            <div class="movie-meta">
+
+              <span>{{ movie.genre }}</span>
+
+              <span>•</span>
+
+              <span>★ {{ movie.rating }}</span>
+
+            </div>
+
+          </div>
+
+        </a>
+
+      }
+
+    </div>
+
+  } @else {
+
+    <div class="section-empty">
+
+      <div class="empty-icon">♡</div>
+
+      <h3>No liked movies yet</h3>
+
+      <p>
+
+        Movies you like will appear here.
+
+      </p>
+
+      <a
+
+        routerLink="/movies"
+
+        class="secondary-button"
+
+      >
+
+        Browse Movies
+
+      </a>
+
+    </div>
+
+  }
+
+</section>
+}
+</div>

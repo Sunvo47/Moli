@@ -1,0 +1,327 @@
+.watch-page {
+  min-height: 100vh;
+  background: #050816;
+  color: #ffffff;
+  padding-bottom: 80px;
+}
+
+.state-box {
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  color: #aeb4c7;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.state-box h2 {
+  color: #ffffff;
+  margin: 0;
+}
+
+.state-box p {
+  margin: 0;
+}
+
+.state-box.error {
+  color: #ff9b9b;
+}
+
+.loader {
+  width: 42px;
+  height: 42px;
+  border: 3px solid rgba(255, 255, 255, 0.12);
+  border-top-color: #8b5cf6;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.player-section {
+  width: min(1200px, calc(100% - 40px));
+  margin: 0 auto;
+  padding-top: 32px;
+}
+
+.player-wrapper {
+  width: 100%;
+  background: #000000;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+}
+
+.demo-video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000000;
+  object-fit: contain;
+}
+
+.watch-info {
+  padding: 30px 4px 0;
+}
+
+.movie-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 30px;
+}
+
+.eyebrow {
+  display: inline-block;
+  margin-bottom: 10px;
+  color: #a78bfa;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+.movie-heading h1 {
+  margin: 0 0 12px;
+  font-size: clamp(28px, 4vw, 46px);
+  line-height: 1.1;
+}
+
+.movie-heading p {
+  max-width: 760px;
+  margin: 0;
+  color: #aeb4c7;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.back-link {
+  flex-shrink: 0;
+  color: #ffffff;
+  text-decoration: none;
+  padding: 11px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
+  transition: 0.2s ease;
+}
+
+.back-link:hover {
+  border-color: #8b5cf6;
+  color: #c4b5fd;
+}
+
+.rental-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: fit-content;
+  margin-top: 28px;
+  padding: 12px 16px;
+  background: rgba(139, 92, 246, 0.08);
+  border: 1px solid rgba(139, 92, 246, 0.22);
+  border-radius: 12px;
+}
+
+.status-dot {
+  width: 9px;
+  height: 9px;
+  flex-shrink: 0;
+  background: #22c55e;
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.5);
+}
+
+.rental-status div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.rental-status strong {
+  font-size: 14px;
+}
+
+.rental-status span {
+  color: #9ca3b8;
+  font-size: 12px;
+}
+
+.watch-status {
+  margin: 14px 0 0;
+  color: #aeb4c7;
+  font-size: 13px;
+}
+
+.watch-status.success {
+  color: #86efac;
+}
+
+.rental-required {
+  position: relative;
+  min-height: calc(100vh - 80px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 60px 20px;
+}
+
+.rental-backdrop {
+  position: absolute;
+  inset: 0;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: 0.75;
+}
+
+.rental-content {
+  position: relative;
+  z-index: 1;
+  width: min(600px, 100%);
+  text-align: center;
+  padding: 40px 24px;
+}
+
+.lock-icon {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  background: rgba(139, 92, 246, 0.12);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  border-radius: 50%;
+  font-size: 26px;
+}
+
+.rental-content h1 {
+  margin: 0 0 12px;
+  font-size: clamp(30px, 5vw, 48px);
+}
+
+.rental-content > p {
+  margin: 0;
+  color: #aeb4c7;
+  line-height: 1.6;
+}
+
+.rental-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.rent-btn,
+.secondary-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0 22px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  transition: 0.2s ease;
+}
+
+.rent-btn {
+  background: #8b5cf6;
+  color: #ffffff;
+}
+
+.rent-btn:hover {
+  background: #7c3aed;
+}
+
+.secondary-btn {
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.secondary-btn:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 20px;
+  margin-top: 10px;
+  border-radius: 10px;
+  background: #8b5cf6;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+@media (max-width: 700px) {
+  .watch-page {
+    padding-bottom: 40px;
+  }
+
+  .player-section {
+    width: 100%;
+    padding-top: 0;
+  }
+
+  .player-wrapper {
+    border-radius: 0;
+  }
+
+  .watch-info {
+    padding: 24px 20px 0;
+  }
+
+  .movie-heading {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .back-link {
+    width: fit-content;
+  }
+
+  .rental-required {
+    min-height: 70vh;
+  }
+
+  .rental-content {
+    padding: 30px 20px;
+  }
+
+  .rental-actions {
+    flex-direction: column;
+  }
+
+  .rent-btn,
+  .secondary-btn {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loader {
+    animation: none;
+  }
+
+  .back-link,
+  .rent-btn,
+  .secondary-btn {
+    transition: none;
+  }
+}

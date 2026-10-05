@@ -1,0 +1,194 @@
+<section class="home-page">
+
+  @if (loading) {
+    <div class="state-box">
+      <div class="loader"></div>
+      <p>Loading Moli...</p>
+    </div>
+  }
+
+  @if (error) {
+    <div class="state-box error">
+      <p>{{ error }}</p>
+      <button type="button" (click)="loadMovies()">Try Again</button>
+    </div>
+  }
+
+  @if (!loading && !error && featuredMovie) {
+
+    <section
+      class="hero"
+      [style.background-image]="'linear-gradient(90deg, rgba(5, 8, 24, .98) 0%, rgba(5, 8, 24, .82) 42%, rgba(5, 8, 24, .15) 100%), url(' + featuredMovie.backdrop + ')'"
+    >
+      <div class="hero-content">
+
+        <span class="eyebrow">MOLI ORIGINAL</span>
+
+        <h1>{{ featuredMovie.title }}</h1>
+
+        <div class="hero-meta">
+          <span class="rating">★ {{ featuredMovie.rating }}</span>
+          <span>{{ featuredMovie.viewCount | number }} views</span>
+          <span>♡ {{ featuredMovie.likeCount | number }}</span>
+        </div>
+
+        <div class="hero-tags">
+          <span>{{ featuredMovie.genre }}</span>
+          <span>{{ featuredMovie.type }}</span>
+          <span>{{ formatDuration(featuredMovie.duration) }}</span>
+        </div>
+
+        <p class="hero-description">
+          {{ featuredMovie.description }}
+        </p>
+
+        <div class="hero-actions">
+          <a class="watch-btn" [routerLink]="['/movies', featuredMovie.id]">
+            ▶ Watch Now
+          </a>
+
+          <a class="info-btn" [routerLink]="['/movies', featuredMovie.id]">
+            More Info
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Trending Now -->
+    <section class="movie-section trending-section">
+
+      <div class="section-heading">
+        <h2>Trending Now</h2>
+        <a routerLink="/movies">View All</a>
+      </div>
+
+      @if (trendingMovies.length) {
+
+        <div class="trending-wrapper">
+
+          <div class="trending-track">
+
+            @for (movie of trendingMovies; track movie.id) {
+              <a
+                class="movie-card trending-card"
+                [routerLink]="['/movies', movie.id]"
+              >
+                <div class="poster-wrapper">
+                  <img
+                    [src]="movie.poster"
+                    [alt]="movie.title"
+                  />
+
+                  <div class="poster-overlay">
+                    <span>▶</span>
+                  </div>
+                </div>
+
+                <div class="movie-info">
+                  <h3>{{ movie.title }}</h3>
+
+                  <div class="movie-meta">
+                    <span>★ {{ movie.rating }}</span>
+                    <span>{{ movie.genre }}</span>
+                  </div>
+                </div>
+              </a>
+            }
+
+            @for (movie of trendingMovies; track 'duplicate-' + movie.id) {
+              <a
+                class="movie-card trending-card"
+                [routerLink]="['/movies', movie.id]"
+                tabindex="-1"
+                aria-hidden="true"
+              >
+                <div class="poster-wrapper">
+                  <img
+                    [src]="movie.poster"
+                    [alt]="movie.title"
+                  />
+
+                  <div class="poster-overlay">
+                    <span>▶</span>
+                  </div>
+                </div>
+
+                <div class="movie-info">
+                  <h3>{{ movie.title }}</h3>
+
+                  <div class="movie-meta">
+                    <span>★ {{ movie.rating }}</span>
+                    <span>{{ movie.genre }}</span>
+                  </div>
+                </div>
+              </a>
+            }
+
+          </div>
+
+        </div>
+
+      } @else {
+        <div class="empty-state">
+          No movies available.
+        </div>
+      }
+
+    </section>
+
+    <!-- New Releases -->
+    <section class="movie-section">
+
+      <div class="section-heading">
+        <h2>New Releases</h2>
+        <a routerLink="/movies">View All</a>
+      </div>
+
+      @if (newReleases.length) {
+        <div class="movie-grid">
+          @for (movie of newReleases; track movie.id) {
+            <a
+              class="movie-card"
+              [routerLink]="['/movies', movie.id]"
+            >
+              <div class="poster-wrapper">
+                <img
+                  [src]="movie.poster"
+                  [alt]="movie.title"
+                />
+
+                <div class="poster-overlay">
+                  <span>▶</span>
+                </div>
+              </div>
+
+              <div class="movie-info">
+                <h3>{{ movie.title }}</h3>
+
+                <div class="movie-meta">
+                  <span>★ {{ movie.rating }}</span>
+                  <span>{{ movie.genre }}</span>
+                </div>
+              </div>
+            </a>
+          }
+        </div>
+      } @else {
+        <div class="empty-state">
+          No new releases available.
+        </div>
+      }
+
+    </section>
+
+  }
+
+  @if (!loading && !error && !featuredMovie) {
+    <div class="state-box">
+      <h2>No movies yet</h2>
+      <p>Add movies from the admin system to see them here.</p>
+    </div>
+  }
+
+</section>

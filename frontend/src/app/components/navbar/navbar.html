@@ -1,0 +1,238 @@
+<nav class="navbar">
+
+  <!-- Brand -->
+
+  <a class="brand" routerLink="/home">
+    MOLI
+  </a>
+
+  <!-- Main Navigation -->
+
+  <div class="nav-links">
+
+<!-- Home -->
+<a
+  routerLink="/home"
+  routerLinkActive="active"
+  [routerLinkActiveOptions]="{ exact: true }"
+  class="nav-item"
+  aria-label="Home"
+>
+  <span class="nav-label">Home</span>
+  <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="m3 10 9-7 9 7"></path>
+    <path d="M5 9v11h14V9"></path>
+    <path d="M9 20v-6h6v6"></path>
+  </svg>
+</a>
+
+<!-- Movies -->
+<a
+  routerLink="/movies"
+  routerLinkActive="active"
+  class="nav-item"
+  aria-label="Movies"
+>
+  <span class="nav-label">Movies</span>
+  <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+    <rect width="18" height="18" x="3" y="3" rx="2"></rect>
+    <path d="M7 3v18"></path>
+    <path d="M3 7h4"></path>
+    <path d="M3 12h4"></path>
+    <path d="M3 17h4"></path>
+    <path d="M17 3v18"></path>
+    <path d="M17 7h4"></path>
+    <path d="M17 12h4"></path>
+    <path d="M17 17h4"></path>
+  </svg>
+</a>
+
+<!-- Reels -->
+<a
+  routerLink="/reels"
+  routerLinkActive="active"
+  class="nav-item"
+  aria-label="Reels"
+>
+  <span class="nav-label">Reels</span>
+  <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+    <rect width="20" height="20" x="2" y="2" rx="5"></rect>
+    <path d="m9 8 6 4-6 4Z"></path>
+  </svg>
+</a>
+
+
+<!-- My Library -->
+<a
+  routerLink="/library"
+  routerLinkActive="active"
+  class="nav-item"
+  aria-label="My Library"
+>
+  <span class="nav-label">My Library</span>
+  <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"></path>
+  </svg>
+</a>
+
+  </div>
+
+  <!-- Right Actions -->
+
+  <div class="nav-actions">
+
+<!-- Theme -->
+<button
+  type="button"
+  class="brightness-btn"
+  (click)="toggleBrightness()"
+  [attr.aria-label]="isLightMode ? 'Switch to dark mode' : 'Switch to light mode'"
+>
+  @if (isLightMode) {
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 3v2"></path>
+      <path d="M12 19v2"></path>
+      <path d="m4.93 4.93 1.41 1.41"></path>
+      <path d="m17.66 17.66 1.41 1.41"></path>
+      <path d="M3 12h2"></path>
+      <path d="M19 12h2"></path>
+      <path d="m6.34 17.66-1.41 1.41"></path>
+      <path d="m19.07 4.93-1.41 1.41"></path>
+      <circle cx="12" cy="12" r="4"></circle>
+    </svg>
+  } @else {
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"></path>
+    </svg>
+  }
+</button>
+
+@if (isLoggedIn) {
+
+  <!-- Profile -->
+  <div class="profile-wrapper">
+
+    <button
+      type="button"
+      class="profile-button"
+      (click)="toggleProfileMenu()"
+      [attr.aria-expanded]="isProfileMenuOpen"
+      aria-label="Profile menu"
+    >
+
+      @if (profileImage) {
+        <img
+          class="profile-avatar"
+          [src]="profileImage"
+          alt="Profile"
+        />
+      } @else {
+        <span class="profile-avatar default-avatar">
+          {{ userName.charAt(0).toUpperCase() || 'U' }}
+        </span>
+      }
+
+      <span class="profile-name">
+        {{ userName || 'User' }}
+      </span>
+
+      <span class="profile-arrow">
+        {{ isProfileMenuOpen ? '▲' : '▼' }}
+      </span>
+
+    </button>
+
+    @if (isProfileMenuOpen) {
+
+      <div class="profile-menu">
+
+        <div class="profile-menu-header">
+
+          @if (profileImage) {
+            <img
+              class="menu-avatar"
+              [src]="profileImage"
+              alt="Profile"
+            />
+          } @else {
+            <span class="menu-avatar default-avatar">
+              {{ userName.charAt(0).toUpperCase() || 'U' }}
+            </span>
+          }
+
+          <div class="profile-info">
+            <strong>{{ userName || 'User' }}</strong>
+            <span>My Moli Account</span>
+          </div>
+
+        </div>
+
+        <div class="profile-menu-divider"></div>
+
+        <a
+          routerLink="/profile"
+          class="profile-menu-item"
+          (click)="closeProfileMenu()"
+        >
+          <span class="menu-item-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="8" r="4"></circle>
+              <path d="M4 21a8 8 0 0 1 16 0"></path>
+            </svg>
+          </span>
+          <span>Profile</span>
+        </a>
+
+        <a
+          routerLink="/settings"
+          class="profile-menu-item"
+          (click)="closeProfileMenu()"
+        >
+          <span class="menu-item-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"></path>
+              <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-1.42 1.42-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V20h-2v-.48a1.7 1.7 0 0 0-1.03-1.56 1.7 1.7 0 0 0-1.88.34l-.06.06-1.42-1.42.06-.06A1.7 1.7 0 0 0 8.4 15a1.7 1.7 0 0 0-1.56-1.03H6v-2h.48A1.7 1.7 0 0 0 8.04 10a1.7 1.7 0 0 0-.34-1.88l-.06-.06 1.42-1.42.06.06A1.7 1.7 0 0 0 11 7.04 1.7 1.7 0 0 0 12.03 5.48V5h2v.48A1.7 1.7 0 0 0 15.06 7a1.7 1.7 0 0 0 1.88-.34l.06-.06 1.42 1.42-.06.06A1.7 1.7 0 0 0 18.02 10a1.7 1.7 0 0 0 1.56 1.03H20v2h-.42A1.7 1.7 0 0 0 19.4 15Z"></path>
+            </svg>
+          </span>
+          <span>Account Settings</span>
+        </a>
+
+        <div class="profile-menu-divider"></div>
+
+        <button
+          type="button"
+          class="profile-menu-item logout-item"
+          (click)="logout()"
+        >
+          <span class="menu-item-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <path d="m16 17 5-5-5-5"></path>
+              <path d="M21 12H9"></path>
+            </svg>
+          </span>
+          <span>Logout</span>
+        </button>
+
+      </div>
+
+    }
+
+  </div>
+
+} @else {
+
+  <a
+    routerLink="/login"
+    routerLinkActive="active"
+    class="login-button"
+  >
+    Login
+  </a>
+
+}
+
+  </div>
+
+</nav>

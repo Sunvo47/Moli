@@ -1,0 +1,122 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int            @id @default(autoincrement())
+  name          String
+  email         String         @unique
+  password      String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  role          String         @default("USER")
+  profileImage  String?
+  likes         MovieLike[]
+  myLists       MyList[]
+  createdReels  Reel[]
+  reels         ReelLike[]
+  rentals       Rental[]
+  WatchHistory  WatchHistory[]
+}
+
+model Movie {
+  id             Int            @id @default(autoincrement())
+  title          String
+  description    String
+  poster         String
+  backdrop       String
+  type           String
+  genre          String
+  duration       Int
+  rating         Float          @default(0)
+  rentalPrice    Float
+  rentalDuration Int
+  releaseDate    DateTime
+  viewCount      Int            @default(0)
+  likeCount      Int            @default(0)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  likes          MovieLike[]
+  myLists        MyList[]
+  reels          Reel[]
+  rentals        Rental[]
+  WatchHistory   WatchHistory[]
+}
+
+model Rental {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  movieId   Int
+  rentedAt  DateTime @default(now())
+  expiresAt DateTime
+  status    String   @default("ACTIVE")
+  price     Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  movie     Movie    @relation(fields: [movieId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model MovieLike {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  movieId   Int
+  createdAt DateTime @default(now())
+  movie     Movie    @relation(fields: [movieId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, movieId])
+}
+
+model MyList {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  movieId   Int
+  createdAt DateTime @default(now())
+  movie     Movie    @relation(fields: [movieId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, movieId])
+}
+
+model WatchHistory {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  movieId   Int
+  watchedAt DateTime @default(now())
+  Movie     Movie    @relation(fields: [movieId], references: [id])
+  User      User     @relation(fields: [userId], references: [id])
+}
+
+model Reel {
+  id          Int        @id @default(autoincrement())
+  title       String
+  description String
+  videoUrl    String
+  thumbnail   String
+  viewCount   Int        @default(0)
+  likeCount   Int        @default(0)
+  movieId     Int
+  createdBy   Int
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  creator     User       @relation(fields: [createdBy], references: [id])
+  movie       Movie      @relation(fields: [movieId], references: [id])
+  likes       ReelLike[]
+}
+
+model ReelLike {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  reelId    Int
+  createdAt DateTime @default(now())
+  reel      Reel     @relation(fields: [reelId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, reelId])
+}

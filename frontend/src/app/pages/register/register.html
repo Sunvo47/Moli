@@ -1,0 +1,140 @@
+<section class="register-page">
+
+  <div class="register-glow glow-one"></div>
+  <div class="register-glow glow-two"></div>
+
+  <div class="register-container">
+
+<div class="brand">
+  <span class="brand-mark">M</span>
+
+  <span class="brand-name">
+    MOLI
+  </span>
+</div>
+
+<div class="register-card">
+
+  <div class="register-heading">
+
+    <span class="eyebrow">
+      JOIN MOLI
+    </span>
+
+    <h1>
+      Create your account.
+    </h1>
+
+    <p>
+      Start building your movie library and discover something new.
+    </p>
+
+  </div>
+
+  <form
+    class="register-form"
+    (ngSubmit)="register()"
+  >
+
+    <label>
+      <span>Name</span>
+
+      <input
+        type="text"
+        name="name"
+        [(ngModel)]="name"
+        placeholder="Your name"
+        autocomplete="name"
+        required
+      >
+    </label>
+
+    <label>
+      <span>Email</span>
+
+      <input
+        type="email"
+        name="email"
+        [(ngModel)]="email"
+        placeholder="you@example.com"
+        autocomplete="email"
+        required
+      >
+    </label>
+
+    <label>
+      <span>Password</span>
+
+      <input
+        type="password"
+        name="password"
+        [(ngModel)]="password"
+        placeholder="At least 6 characters"
+        autocomplete="new-password"
+        required
+      >
+    </label>
+
+    <label>
+      <span>Confirm Password</span>
+
+      <input
+        type="password"
+        name="confirmPassword"
+        [(ngModel)]="confirmPassword"
+        placeholder="Enter your password again"
+        autocomplete="new-password"
+        required
+      >
+    </label>
+
+    @if (error) {
+
+      <div class="error-message">
+        <span>!</span>
+        {{ error }}
+      </div>
+
+    }
+
+    <button
+      type="submit"
+      class="register-submit"
+      [disabled]="loading"
+    >
+
+      @if (loading) {
+        <span class="button-loader"></span>
+        Creating account...
+      } @else {
+        Create Account
+      }
+
+    </button>
+
+  </form>
+
+  <div class="login-row">
+
+    <span>
+      Already have an account?
+    </span>
+
+    <a routerLink="/login">
+      Sign in
+    </a>
+
+  </div>
+
+</div>
+
+<a
+  routerLink="/home"
+  class="back-home"
+>
+  ← Back to Moli
+</a>
+
+  </div>
+
+</section>

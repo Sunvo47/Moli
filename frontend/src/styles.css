@@ -1,0 +1,281 @@
+* {
+box-sizing: border-box;
+}
+html {
+margin: 0;
+padding: 0;
+background: #050816;
+}
+body {
+margin: 0;
+min-width: 320px;
+background: #050816;
+color: #ffffff;
+font-family:
+Inter,
+-apple-system,
+BlinkMacSystemFont,
+"Segoe UI",
+sans-serif;
+transition:
+background-color 0.3s ease,
+color 0.3s ease;
+}
+/* =========================
+Light Mode
+========================= */
+body.light-mode {
+background: #d6e4f0;
+color: #102a43;
+}
+body.light-mode .home-page {
+background: #d6e4f0;
+color: #102a43;
+}
+body.light-mode .movie-card {
+color: #102a43;
+}
+body.light-mode .movie-meta {
+color: rgba(16, 42, 67, 0.62);
+}
+body.light-mode .movie-meta span:first-child {
+color: rgba(16, 42, 67, 0.88);
+}
+body.light-mode .section-heading a {
+color: #7c3aed;
+}
+body.light-mode .hero-description {
+color: rgba(16, 42, 67, 0.72);
+}
+body.light-mode .state-box,
+body.light-mode .empty-state {
+background: rgba(234, 242, 248, 0.94);
+border-color: rgba(45, 91, 126, 0.16);
+}
+body.light-mode .state-box p,
+body.light-mode .empty-state {
+color: rgba(72, 101, 129, 0.9);
+}
+/* Smooth theme transition */
+.home-page,
+.movie-card,
+.state-box,
+.empty-state {
+transition:
+background-color 0.3s ease,
+color 0.3s ease,
+border-color 0.3s ease;
+}
+
+/* Moli Blue Cream Light Theme /
+/ Moli Blue Cream Light Theme */
+body.light-mode {
+background: #dcebf3;
+color: #263746;
+}
+body.light-mode html {
+background: #dcebf3;
+}
+/* Home */
+body.light-mode .home-page {
+background: #dcebf3;
+color: #263746;
+}
+/* Navbar */
+body.light-mode .navbar {
+background: rgba(247, 241, 227, 0.96);
+border-bottom-color: #c7d8df;
+}
+body.light-mode .nav-link {
+color: #486273;
+}
+body.light-mode .nav-link:hover,
+body.light-mode .nav-link.active {
+color: #7c3aed;
+}
+body.light-mode .brand {
+color: #7c3aed;
+}
+body.light-mode .theme-toggle,
+body.light-mode .login-btn {
+color: #263746;
+border-color: #c7d8df;
+background: #f7f1e3;
+}
+/* Movie cards */
+body.light-mode .movie-card {
+background: transparent;
+color: #263746;
+border-color: #c7d8df;
+}
+body.light-mode .movie-card h3,
+body.light-mode .movie-title {
+color: #263746;
+}
+body.light-mode .movie-meta {
+color: #607482;
+}
+body.light-mode .movie-meta span:first-child {
+color: #344f61;
+}
+/* Movies page */
+body.light-mode .movies-page {
+background: #dcebf3;
+color: #263746;
+}
+body.light-mode .movies-page h1,
+body.light-mode .movies-page h2,
+body.light-mode .movies-page h3,
+body.light-mode .movies-page p {
+color: #263746;
+}
+body.light-mode .movies-toolbar {
+background: #f7f1e3;
+border-color: #c7d8df;
+}
+body.light-mode .movies-toolbar input,
+body.light-mode .movies-toolbar select {
+background: #fffaf0;
+color: #263746;
+border-color: #c7d8df;
+}
+body.light-mode .movies-toolbar input::placeholder {
+color: #78909c;
+}
+body.light-mode .state-box,
+body.light-mode .empty-state {
+background: #f7f1e3;
+color: #263746;
+border-color: #c7d8df;
+}
+body.light-mode .state-box p,
+body.light-mode .empty-state p {
+color: #607482;
+}
+/* Library */
+body.light-mode .library-page {
+background: #dcebf3;
+color: #263746;
+}
+body.light-mode .library-page h1,
+body.light-mode .library-page h2,
+body.light-mode .library-page h3,
+body.light-mode .library-page h4 {
+color: #263746;
+}
+body.light-mode .library-page p,
+body.light-mode .library-page small {
+color: #607482;
+}
+body.light-mode .library-section {
+color: #263746;
+}
+body.light-mode .library-section > h2,
+body.light-mode .library-section > h3 {
+color: #263746;
+}
+body.light-mode .library-page .movie-card,
+body.light-mode .library-page .rental-card,
+body.light-mode .library-page .history-card,
+body.light-mode .library-page .empty-state,
+body.light-mode .library-page .state-box {
+background: #f7f1e3;
+border-color: #c7d8df;
+color: #263746;
+}
+/* Profile */
+body.light-mode .profile-page {
+background: #dcebf3;
+color: #263746;
+}
+body.light-mode .profile-header h1,
+body.light-mode .profile-header p {
+color: #263746;
+}
+body.light-mode .profile-card {
+background: #f7f1e3;
+border-color: #c7d8df;
+color: #263746;
+}
+body.light-mode .profile-card label {
+color: #486273;
+}
+body.light-mode .profile-card input {
+background: #fffaf0;
+color: #263746;
+border-color: #c7d8df;
+}
+body.light-mode .profile-card input::placeholder {
+color: #78909c;
+}
+/* Settings */
+body.light-mode .settings-page {
+background: #dcebf3;
+color: #263746;
+}
+body.light-mode .settings-header h1,
+body.light-mode .settings-header p {
+color: #263746;
+}
+body.light-mode .settings-card {
+background: #f7f1e3;
+border-color: #c7d8df;
+color: #263746;
+}
+body.light-mode .settings-card h2,
+body.light-mode .settings-card h3,
+body.light-mode .settings-card label {
+color: #263746;
+}
+body.light-mode .settings-card input {
+background: #fffaf0;
+color: #263746;
+border-color: #c7d8df;
+}
+/* Login / Register / Forgot Password */
+body.light-mode .login-page,
+body.light-mode .register-page,
+body.light-mode .forgot-password-page {
+background: #dcebf3;
+color: #263746;
+}
+body.light-mode .login-card,
+body.light-mode .register-card,
+body.light-mode .forgot-password-card {
+background: #f7f1e3;
+border-color: #c7d8df;
+color: #263746;
+}
+body.light-mode .login-card h1,
+body.light-mode .register-card h1,
+body.light-mode .forgot-password-card h1,
+body.light-mode .login-card p,
+body.light-mode .register-card p,
+body.light-mode .forgot-password-card p {
+color: #263746;
+}
+body.light-mode .login-card input,
+body.light-mode .register-card input,
+body.light-mode .forgot-password-card input {
+background: #fffaf0;
+color: #263746;
+border-color: #c7d8df;
+}
+/* Purple Moli accent */
+body.light-mode button,
+body.light-mode .primary-btn,
+body.light-mode .watch-btn,
+body.light-mode .rent-btn {
+--moli-accent: #7c3aed;
+}
+/* Links */
+body.light-mode a {
+color: #7c3aed;
+}
+/* Prevent old white backgrounds from appearing */
+body.light-mode .card,
+body.light-mode .panel {
+background: #f7f1e3;
+border-color: #c7d8df;
+color: #263746;
+}

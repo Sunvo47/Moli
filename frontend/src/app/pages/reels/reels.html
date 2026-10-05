@@ -1,0 +1,171 @@
+<section class="reels-page">
+
+@if (loading) { <div class="state-box"> <div class="loader"></div> <p>Loading reels...</p> </div>
+}
+
+@if (!loading && error && !reels.length) { <div class="state-box error"> <h2>Something went wrong</h2> <p>{{ error }}</p>
+
+
+  <button
+    type="button"
+    class="retry-btn"
+    (click)="loadReels()"
+  >
+    Try Again
+  </button>
+</div>
+
+
+}
+
+@if (!loading && !reels.length && !error) { <div class="state-box"> <h2>No reels yet</h2> <p>There are no short videos available right now.</p> </div>
+}
+
+@if (!loading && reels.length) {
+
+
+<div class="reels-header">
+  <div>
+    <span class="eyebrow">MOLI SHORTS</span>
+    <h1>Reels</h1>
+    <p>Discover movies through short videos.</p>
+  </div>
+</div>
+
+<div class="reels-feed">
+
+  @for (reel of reels; track reel.id) {
+
+    <article
+      class="reel-card"
+      (mouseenter)="recordView(reel)"
+      (click)="recordView(reel)"
+    >
+
+      <div class="video-wrapper">
+
+        @if (isYouTubeUrl(reel.videoUrl)) {
+
+          <iframe
+            class="reel-video"
+            [src]="getYouTubeEmbedUrl(reel.videoUrl)"
+            [title]="reel.title"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+          >
+          </iframe>
+
+        } @else {
+
+          <video
+            class="reel-video"
+            [src]="getImageUrl(reel.videoUrl)"
+            [poster]="getImageUrl(reel.thumbnail)"
+            autoplay
+            muted
+            loop
+            playsinline
+            controls
+            preload="metadata"
+          >
+          </video>
+
+        }
+
+        <div class="video-gradient"></div>
+
+        <div class="reel-top">
+          <span class="reel-label">
+            REEL
+          </span>
+
+          <span class="view-count">
+            {{ reel.viewCount }} views
+          </span>
+        </div>
+
+        <div class="reel-info">
+
+          <div class="movie-link">
+
+            <img
+              [src]="getImageUrl(reel.movie.poster)"
+              [alt]="reel.movie.title"
+            >
+
+            <div>
+              <span>FROM MOVIE</span>
+
+              <strong>
+                {{ reel.movie.title }}
+              </strong>
+            </div>
+
+          </div>
+
+          <h2>
+            {{ reel.title }}
+          </h2>
+
+          <p>
+            {{ reel.description }}
+          </p>
+
+          <div class="reel-actions">
+
+            <button
+              type="button"
+              class="action-btn"
+              [class.liked]="isLiked(reel.id)"
+              [disabled]="likeLoading.has(reel.id)"
+              (click)="$event.stopPropagation(); toggleLike(reel)"
+            >
+              <span class="action-icon">
+                {{ isLiked(reel.id) ? '♥' : '♡' }}
+              </span>
+
+              <span>
+                {{ reel.likeCount }}
+              </span>
+            </button>
+
+            <button
+              type="button"
+              class="action-btn"
+              (click)="$event.stopPropagation(); shareReel(reel)"
+            >
+              <span class="action-icon">↗</span>
+              <span>Share</span>
+            </button>
+
+            <a
+              class="watch-movie-btn"
+              [routerLink]="['/movies', reel.movie.id]"
+              (click)="$event.stopPropagation()"
+            >
+              Watch Movie
+              <span>→</span>
+            </a>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </article>
+
+  }
+
+</div>
+
+
+}
+
+@if (error && reels.length) { <div class="floating-error">
+{{ error }} </div>
+}
+
+</section>

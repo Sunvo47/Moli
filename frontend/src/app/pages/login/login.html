@@ -1,0 +1,120 @@
+<section class="login-page">
+
+  <div class="login-glow glow-one"></div>
+  <div class="login-glow glow-two"></div>
+
+  <div class="login-container">
+
+<div class="brand">
+  <span class="brand-mark">M</span>
+
+  <span class="brand-name">
+    MOLI
+  </span>
+</div>
+
+<div class="login-card">
+
+  <div class="login-heading">
+
+    <span class="eyebrow">
+      WELCOME BACK
+    </span>
+
+    <h1>
+      Sign in to Moli
+    </h1>
+
+    <p>
+      Continue watching and discover something new.
+    </p>
+
+  </div>
+
+  <form
+    class="login-form"
+    (ngSubmit)="login()"
+  >
+
+    <label>
+      <span>Email</span>
+
+      <input
+        type="email"
+        name="email"
+        [(ngModel)]="email"
+        placeholder="you@example.com"
+        autocomplete="email"
+        required
+      >
+    </label>
+
+    <label>
+      <span>Password</span>
+
+      <input
+        type="password"
+        name="password"
+        [(ngModel)]="password"
+        placeholder="Enter your password"
+        autocomplete="current-password"
+        required
+      >
+    </label>
+
+    @if (error) {
+
+      <div class="error-message">
+        <span>!</span>
+        {{ error }}
+      </div>
+
+    }
+
+    <button
+      type="submit"
+      class="login-submit"
+      [disabled]="loading"
+    >
+      @if (loading) {
+        <span class="button-loader"></span>
+        Signing in...
+      } @else {
+        Sign In
+      }
+    </button>
+
+  </form>
+
+  <div class="login-links">
+
+    <a routerLink="/forgot-password">
+      Forgot password?
+    </a>
+
+  </div>
+
+  <div class="signup-row">
+
+    <span>
+      Don't have an account?
+    </span>
+
+    <a routerLink="/register">
+      Create account
+    </a>
+
+  </div>
+
+</div>
+
+<a
+  routerLink="/home"
+  class="back-home"
+>
+  ← Back to Moli
+</a>
+
+  </div>
+
+</section>

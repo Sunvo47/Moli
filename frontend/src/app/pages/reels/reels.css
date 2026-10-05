@@ -1,0 +1,733 @@
+.reels-page {
+position: relative;
+height: calc(100vh - 72px);
+min-height: calc(100vh - 72px);
+overflow: hidden;
+background:
+radial-gradient(
+circle at 80% 5%,
+rgba(124, 58, 237, 0.14),
+transparent 28%
+),
+#050816;
+color: #ffffff;
+}
+
+/* =========================
+HEADER
+========================= */
+
+.reels-header {
+position: absolute;
+top: 24px;
+left: 50%;
+z-index: 10;
+width: min(1100px, calc(100% - 40px));
+margin: 0;
+transform: translateX(-50%);
+pointer-events: none;
+}
+
+.eyebrow {
+display: inline-block;
+margin-bottom: 8px;
+color: #a970ff;
+font-size: 11px;
+font-weight: 800;
+letter-spacing: 2px;
+}
+
+.reels-header h1 {
+margin: 0;
+font-size: clamp(32px, 5vw, 48px);
+line-height: 1;
+letter-spacing: -1.5px;
+}
+
+.reels-header p {
+margin: 12px 0 0;
+color: rgba(255, 255, 255, 0.52);
+font-size: 14px;
+}
+
+/* =========================
+REELS FEED
+========================= */
+
+.reels-feed {
+width: min(560px, 100%);
+height: 100%;
+margin: 0 auto;
+
+display: flex;
+flex-direction: column;
+
+overflow-y: auto;
+overflow-x: hidden;
+
+scroll-snap-type: y mandatory;
+scroll-behavior: smooth;
+
+overscroll-behavior-y: contain;
+scrollbar-width: none;
+}
+
+.reels-feed::-webkit-scrollbar {
+display: none;
+}
+
+/* =========================
+REEL CARD
+========================= */
+
+.reel-card {
+position: relative;
+
+width: 100%;
+min-width: 100%;
+height: 100%;
+min-height: 100%;
+
+flex: 0 0 100%;
+
+scroll-snap-align: start;
+scroll-snap-stop: always;
+
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+/* =========================
+VIDEO
+========================= */
+
+.video-wrapper {
+position: relative;
+
+width: 100%;
+height: 100%;
+
+overflow: hidden;
+
+border-radius: 0;
+
+background: #080a18;
+
+border: 0;
+
+box-shadow: none;
+}
+
+.reel-video {
+width: 100%;
+height: 100%;
+
+display: block;
+
+object-fit: cover;
+
+background: #080a18;
+}
+
+/* Keep the video visually focused on the center */
+.video-wrapper::after {
+content: '';
+position: absolute;
+inset: 0;
+
+pointer-events: none;
+
+box-shadow:
+inset 0 0 120px rgba(0, 0, 0, 0.2);
+}
+
+/* =========================
+VIDEO GRADIENT
+========================= */
+
+.video-gradient {
+position: absolute;
+inset: 0;
+
+pointer-events: none;
+
+background:
+linear-gradient(
+180deg,
+rgba(0, 0, 0, 0.55) 0%,
+transparent 22%,
+transparent 45%,
+rgba(0, 0, 0, 0.94) 100%
+);
+}
+
+/* =========================
+TOP INFO
+========================= */
+
+.reel-top {
+position: absolute;
+
+top: 18px;
+left: 18px;
+right: 18px;
+
+z-index: 3;
+
+display: flex;
+align-items: center;
+justify-content: space-between;
+
+pointer-events: none;
+}
+
+.reel-label,
+.view-count {
+padding: 7px 11px;
+
+border-radius: 999px;
+
+background: rgba(5, 8, 24, 0.58);
+
+border: 1px solid rgba(255, 255, 255, 0.12);
+
+backdrop-filter: blur(12px);
+
+font-size: 10px;
+font-weight: 700;
+}
+
+.reel-label {
+color: #c59bff;
+letter-spacing: 1.5px;
+}
+
+.view-count {
+color: rgba(255, 255, 255, 0.75);
+}
+
+/* =========================
+REEL INFO
+========================= */
+
+.reel-info {
+position: absolute;
+
+left: 22px;
+right: 22px;
+bottom: 28px;
+
+z-index: 3;
+}
+
+.movie-link {
+display: inline-flex;
+
+align-items: center;
+gap: 10px;
+
+max-width: 100%;
+
+margin-bottom: 16px;
+
+padding: 7px 11px 7px 7px;
+
+border-radius: 12px;
+
+background: rgba(5, 8, 24, 0.58);
+
+border: 1px solid rgba(255, 255, 255, 0.1);
+
+backdrop-filter: blur(12px);
+}
+
+.movie-link img {
+width: 34px;
+height: 48px;
+
+flex-shrink: 0;
+
+object-fit: cover;
+
+border-radius: 6px;
+}
+
+.movie-link div {
+min-width: 0;
+}
+
+.movie-link span {
+display: block;
+
+margin-bottom: 3px;
+
+color: rgba(255, 255, 255, 0.42);
+
+font-size: 8px;
+font-weight: 800;
+
+letter-spacing: 1px;
+}
+
+.movie-link strong {
+display: block;
+
+overflow: hidden;
+
+color: #ffffff;
+
+font-size: 12px;
+
+white-space: nowrap;
+text-overflow: ellipsis;
+}
+
+.reel-info h2 {
+margin: 0;
+
+font-size: clamp(22px, 4vw, 30px);
+
+line-height: 1.1;
+
+letter-spacing: -0.6px;
+}
+
+.reel-info p {
+max-width: 470px;
+
+margin: 9px 0 16px;
+
+color: rgba(255, 255, 255, 0.68);
+
+font-size: 13px;
+
+line-height: 1.5;
+}
+
+/* =========================
+ACTIONS
+========================= */
+
+.reel-actions {
+display: flex;
+
+align-items: center;
+
+flex-wrap: wrap;
+
+gap: 8px;
+}
+
+.action-btn,
+.watch-movie-btn {
+min-height: 40px;
+
+display: inline-flex;
+
+align-items: center;
+justify-content: center;
+
+gap: 7px;
+
+padding: 0 13px;
+
+border-radius: 10px;
+
+font-size: 12px;
+font-weight: 700;
+}
+
+.action-btn {
+border: 1px solid rgba(255, 255, 255, 0.13);
+
+background: rgba(5, 8, 24, 0.68);
+
+color: #ffffff;
+
+cursor: pointer;
+
+backdrop-filter: blur(10px);
+}
+
+.action-btn:hover {
+background: rgba(255, 255, 255, 0.12);
+}
+
+.action-btn:disabled {
+opacity: 0.55;
+
+cursor: not-allowed;
+}
+
+.action-btn.liked {
+color: #ff7aa8;
+
+border-color: rgba(255, 122, 168, 0.3);
+}
+
+.action-icon {
+font-size: 17px;
+
+line-height: 1;
+}
+
+.watch-movie-btn {
+margin-left: auto;
+
+padding: 0 16px;
+
+background: #ffffff;
+
+color: #080a18;
+
+text-decoration: none;
+}
+
+.watch-movie-btn:hover {
+opacity: 0.9;
+}
+
+.watch-movie-btn span {
+font-size: 16px;
+}
+
+/* =========================
+LOADING / EMPTY / ERROR
+========================= */
+
+.state-box {
+width: min(600px, calc(100% - 40px));
+
+min-height: 280px;
+
+margin: auto;
+
+padding: 42px 30px;
+
+display: flex;
+
+flex-direction: column;
+
+align-items: center;
+justify-content: center;
+
+gap: 12px;
+
+text-align: center;
+
+border: 1px solid rgba(255, 255, 255, 0.08);
+
+border-radius: 20px;
+
+background: rgba(255, 255, 255, 0.04);
+}
+
+.state-box h2 {
+margin: 0;
+
+font-size: 24px;
+}
+
+.state-box p {
+margin: 0;
+
+color: rgba(255, 255, 255, 0.52);
+
+font-size: 14px;
+}
+
+.state-box.error p {
+color: #ff9d9d;
+}
+
+.loader {
+width: 40px;
+height: 40px;
+
+border: 3px solid rgba(255, 255, 255, 0.12);
+
+border-top-color: #a970ff;
+
+border-radius: 50%;
+
+animation: spin 0.8s linear infinite;
+}
+
+.retry-btn {
+min-height: 42px;
+
+margin-top: 8px;
+
+padding: 0 18px;
+
+border: 0;
+
+border-radius: 10px;
+
+background: #ffffff;
+
+color: #080a18;
+
+font-size: 13px;
+
+font-weight: 700;
+
+cursor: pointer;
+}
+
+/* =========================
+FLOATING ERROR
+========================= */
+
+.floating-error {
+position: fixed;
+
+left: 50%;
+bottom: 20px;
+
+z-index: 50;
+
+width: fit-content;
+
+max-width: calc(100% - 32px);
+
+margin: 0;
+
+transform: translateX(-50%);
+
+padding: 11px 16px;
+
+border: 1px solid rgba(255, 100, 100, 0.2);
+
+border-radius: 10px;
+
+background: rgba(60, 10, 20, 0.92);
+
+color: #ffb0b0;
+
+font-size: 12px;
+
+text-align: center;
+
+backdrop-filter: blur(12px);
+}
+
+/* =========================
+LIGHT MODE
+========================= */
+
+:host-context(body.light-mode) .reels-page {
+background:
+radial-gradient(
+circle at 80% 5%,
+rgba(124, 58, 237, 0.11),
+transparent 30%
+),
+#dcebf3;
+
+color: #14244c;
+}
+
+:host-context(body.light-mode) .eyebrow {
+color: #7040d8;
+}
+
+:host-context(body.light-mode) .reels-header p {
+color: rgba(20, 36, 76, 0.58);
+}
+
+:host-context(body.light-mode) .video-wrapper {
+background: #111827;
+}
+
+:host-context(body.light-mode) .reel-video {
+background: #111827;
+}
+
+:host-context(body.light-mode) .reel-label,
+:host-context(body.light-mode) .view-count {
+background: rgba(20, 36, 76, 0.68);
+
+border-color: rgba(255, 255, 255, 0.18);
+}
+
+:host-context(body.light-mode) .reel-label {
+color: #d4b8ff;
+}
+
+:host-context(body.light-mode) .view-count {
+color: rgba(255, 255, 255, 0.82);
+}
+
+:host-context(body.light-mode) .movie-link {
+background: rgba(20, 36, 76, 0.68);
+
+border-color: rgba(255, 255, 255, 0.16);
+}
+
+:host-context(body.light-mode) .movie-link span {
+color: rgba(255, 255, 255, 0.52);
+}
+
+:host-context(body.light-mode) .movie-link strong {
+color: #ffffff;
+}
+
+:host-context(body.light-mode) .reel-info p {
+color: rgba(255, 255, 255, 0.78);
+}
+
+:host-context(body.light-mode) .action-btn {
+background: rgba(20, 36, 76, 0.68);
+
+border-color: rgba(255, 255, 255, 0.18);
+
+color: #ffffff;
+}
+
+:host-context(body.light-mode) .action-btn:hover {
+background: rgba(20, 36, 76, 0.82);
+}
+
+:host-context(body.light-mode) .watch-movie-btn {
+background: #f7f1e3;
+
+color: #14244c;
+}
+
+:host-context(body.light-mode) .state-box {
+background: rgba(255, 255, 255, 0.46);
+
+border-color: rgba(20, 36, 76, 0.1);
+
+box-shadow: 0 18px 45px rgba(20, 36, 76, 0.08);
+}
+
+:host-context(body.light-mode) .state-box h2 {
+color: #14244c;
+}
+
+:host-context(body.light-mode) .state-box p {
+color: rgba(20, 36, 76, 0.58);
+}
+
+:host-context(body.light-mode) .state-box.error p {
+color: #b42318;
+}
+
+:host-context(body.light-mode) .loader {
+border-color: rgba(20, 36, 76, 0.12);
+
+border-top-color: #7040d8;
+}
+
+:host-context(body.light-mode) .retry-btn {
+background: #14244c;
+
+color: #ffffff;
+}
+
+:host-context(body.light-mode) .floating-error {
+background: rgba(255, 244, 244, 0.94);
+
+border-color: rgba(180, 35, 35, 0.18);
+
+color: #b42318;
+}
+
+/* =========================
+ANIMATION
+========================= */
+
+@keyframes spin {
+to {
+transform: rotate(360deg);
+}
+}
+
+/* =========================
+MOBILE
+========================= */
+
+@media (max-width: 600px) {
+.reels-page {
+height: calc(100vh - 64px);
+min-height: calc(100vh - 64px);
+}
+
+.reels-header {
+top: 18px;
+
+
+width: calc(100% - 28px);
+
+
+}
+
+.reels-header h1 {
+font-size: 32px;
+}
+
+.reels-header p {
+margin-top: 8px;
+
+
+font-size: 12px;
+
+
+}
+
+.reels-feed {
+width: 100%;
+}
+
+.reel-card {
+height: 100%;
+min-height: 100%;
+}
+
+.video-wrapper {
+border-radius: 0;
+}
+
+.reel-info {
+left: 15px;
+right: 15px;
+bottom: 20px;
+}
+
+.reel-top {
+top: 14px;
+left: 14px;
+right: 14px;
+}
+
+.reel-actions {
+gap: 6px;
+}
+
+.action-btn,
+.watch-movie-btn {
+min-height: 38px;
+
+
+padding: 0 10px;
+
+
+}
+
+.watch-movie-btn {
+margin-left: 0;
+}
+}
+
+@media (prefers-reduced-motion: reduce) {
+.reels-feed {
+scroll-behavior: auto;
+}
+
+.loader {
+animation: none;
+}
+}
