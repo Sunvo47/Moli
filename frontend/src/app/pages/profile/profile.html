@@ -67,20 +67,10 @@
 
         <div class="avatar">
 
-          @if (profileImage) {
-
-            <img
-              [src]="getProfileImage()"
-              alt="Profile picture"
-            />
-
-          } @else {
-
-            <span>
-              {{ name.charAt(0).toUpperCase() }}
-            </span>
-
-          }
+          <img
+            [src]="getProfileImage()"
+            alt="Profile picture"
+          />
 
         </div>
 

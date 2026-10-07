@@ -647,6 +647,6 @@ export class ProfilePage implements OnInit {
   }
 
   getProfileImage(): string {
-    return this.profileImage || '';
+    return this.profileImage || '/profile-avatar.jpeg';
   }
 }
