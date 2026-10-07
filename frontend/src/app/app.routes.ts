@@ -10,6 +10,7 @@ import { MovieDetail } from './pages/movie-detail/movie-detail';
 import { Watch } from './pages/watch/watch';
 import { Reels } from './pages/reels/reels';
 import { Admin } from './pages/admin/admin';
+import { AdminTroll } from './pages/admin-troll/admin-troll';
 import { ProfilePage } from './pages/profile/profile';
 import { SettingsPage } from './pages/settings/settings';
 
@@ -55,7 +56,8 @@ component: Register
 path: 'forgot-password',
 component: ForgotPassword
 },
-{ path: 'moli-admin-pagemanager-onlyadminkrab', 
+{ path: 'admin', component: AdminTroll },
+{ path: 'หลังบ้านโมลีเฉพาะแอดมินน้องซัน', 
 component: Admin 
 },
 { path: 'profile', 
