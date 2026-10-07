@@ -154,16 +154,31 @@ export class AdminTroll {
     if (this.jumpScare) return;
 
     this.jumpScare = true;
-    this.chasing = false;
 
-    // 🔊 HA HA HA HA HA HA
+    // หยุดสถานะไล่
+    this.chasing = false;
+    this.chaseStart = 0;
+    this.lastMove = 0;
+
+    // 🔊 เสียงหัวเราะ
     this.playLaugh();
 
-    // jumpscare จบ → กลับตำแหน่งเดิม
+    // รอให้ jumpscare เล่นจบ
     this.jumpTimer = setTimeout(() => {
+      // กลับไปจุดกลางเดิม
       this.monkeyX = 0;
       this.monkeyY = 0;
+
+      // ปิด jumpscare
       this.jumpScare = false;
+
+      // รออีกนิด แล้วเปิดให้โดนไล่รอบใหม่
+      setTimeout(() => {
+        this.chasing = false;
+        this.chaseStart = 0;
+        this.lastMove = performance.now();
+      }, 500);
+
     }, 1800);
   }
 
