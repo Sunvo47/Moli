@@ -1,0 +1,491 @@
+.troll-page {
+  min-height: 100vh;
+  background: #050816;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 24px;
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Flash ตอนเปิดหน้า */
+.flash {
+  position: fixed;
+  inset: 0;
+  background: white;
+  pointer-events: none;
+  z-index: 20;
+  animation: flash 0.35s ease-out forwards;
+}
+
+@keyframes flash {
+  0% {
+    opacity: 0.9;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Welcome เด้งขึ้นมา */
+.welcome {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px;
+  animation: welcomePop 0.7s cubic-bezier(.17,.67,.3,1.4) 0.15s both;
+}
+
+.welcome span {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 5px;
+  opacity: 0.8;
+}
+
+.welcome strong {
+  font-size: clamp(32px, 7vw, 64px);
+  color: #a970ff;
+  letter-spacing: 3px;
+  text-shadow: 0 0 25px rgba(169, 112, 255, 0.7);
+}
+
+@keyframes welcomePop {
+  0% {
+    opacity: 0;
+    transform: scale(0.1) translateY(-100px);
+  }
+
+  60% {
+    opacity: 1;
+    transform: scale(1.15) translateY(10px);
+  }
+
+  100% {
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* กล่องลิงพุ่งออกมา */
+/* ลิงพุ่งเต็มจอแล้วหดกลับ */
+/* คำว่าเฟลร่วงลงมาจากด้านบน */
+.fail-text {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  z-index: 30;
+  font-size: clamp(60px, 12vw, 140px);
+  font-weight: 900;
+  color: #ff3b3b;
+  text-shadow:
+    0 6px 0 #8f1111,
+    0 0 30px rgba(255, 59, 59, 0.7);
+  pointer-events: none;
+  transform: translate(-50%, -150%);
+  animation: failDrop 0.8s cubic-bezier(.2,1.6,.3,1) 1.45s forwards;
+}
+
+@keyframes failDrop {
+  0% {
+    transform: translate(-50%, -150%);
+  }
+
+  70% {
+    transform: translate(-50%, 120px) rotate(-4deg);
+  }
+
+  85% {
+    transform: translate(-50%, 90px) rotate(4deg);
+  }
+
+  100% {
+    transform: translate(-50%, 105px) rotate(0);
+  }
+}
+
+/* ลิงพุ่งเต็มจอ → สั่น → ย่อกลับ */
+.monkey-container {
+  position: relative;
+  z-index: 10;
+  animation: monkeyLaunch 1.5s cubic-bezier(.12,.8,.2,1) 0.65s both;
+}
+
+.monkey-container img {
+  width: min(500px, 88vw);
+  max-height: 52vh;
+  object-fit: contain;
+  border-radius: 20px;
+  box-shadow:
+    0 0 20px rgba(169, 112, 255, 0.4),
+    0 20px 70px rgba(169, 112, 255, 0.25);
+}
+
+@keyframes monkeyLaunch {
+  0% {
+    opacity: 0;
+    transform: scale(0.05) translateY(500px);
+  }
+
+  20% {
+    opacity: 1;
+    transform: scale(1.5) translateY(180px) rotate(-5deg);
+  }
+
+  35% {
+    transform: scale(4) translateY(0) rotate(5deg);
+  }
+
+  40% {
+    transform: scale(5) translateX(-25px) rotate(-5deg);
+  }
+
+  45% {
+    transform: scale(5) translateX(25px) rotate(5deg);
+  }
+
+  50% {
+    transform: scale(5) translateX(-20px) rotate(-4deg);
+  }
+
+  55% {
+    transform: scale(5) translateX(20px) rotate(4deg);
+  }
+
+  60% {
+    transform: scale(5) translateX(-12px) rotate(-2deg);
+  }
+
+  65% {
+    transform: scale(5) translateX(12px) rotate(2deg);
+  }
+
+  100% {
+    transform: scale(1) translateX(0) rotate(0);
+  }
+}
+
+.troll-page h1 {
+  position: relative;
+  z-index: 5;
+  margin: 20px 0 6px;
+  font-size: 42px;
+  color: #a970ff;
+  animation: textBounce 0.6s ease-out 1.2s both;
+}
+
+.troll-page p {
+  position: relative;
+  z-index: 5;
+  margin: 0;
+  font-size: 18px;
+  opacity: 0.8;
+  animation: textBounce 0.6s ease-out 1.35s both;
+}
+
+@keyframes textBounce {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  70% {
+    opacity: 1;
+    transform: translateY(-8px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Light Mode ของ Moli */
+:host-context(body.light-mode) .troll-page {
+  background: #dcebf3;
+  color: #17212b;
+}
+
+:host-context(body.light-mode) .welcome strong {
+  color: #3f7ea3;
+  text-shadow: 0 0 25px rgba(63, 126, 163, 0.45);
+}
+
+:host-context(body.light-mode) .monkey-container img {
+  box-shadow:
+    0 0 20px rgba(63, 126, 163, 0.35),
+    0 20px 70px rgba(63, 126, 163, 0.2);
+}
+
+:host-context(body.light-mode) .troll-page h1 {
+  color: #3f7ea3;
+}
+
+/* ฝน ERROR / 404 / เฟล */
+.error-rain {
+  position: fixed;
+  inset: -120px 0 0;
+  z-index: 25;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.error-rain span {
+  position: absolute;
+  top: -100px;
+  font-weight: 900;
+  font-size: clamp(22px, 4vw, 48px);
+  color: #ff3b3b;
+  text-shadow:
+    0 3px 0 #7d1111,
+    0 0 15px rgba(255, 59, 59, 0.6);
+  animation: errorRain linear infinite;
+}
+
+/* แต่ละตัวตกคนละตำแหน่งและความเร็ว */
+.error-rain span:nth-child(1) {
+  left: 4%;
+  animation-duration: 3.2s;
+  animation-delay: 0s;
+}
+
+.error-rain span:nth-child(2) {
+  left: 12%;
+  animation-duration: 4.1s;
+  animation-delay: 1.2s;
+}
+
+.error-rain span:nth-child(3) {
+  left: 21%;
+  animation-duration: 3.5s;
+  animation-delay: 0.5s;
+}
+
+.error-rain span:nth-child(4) {
+  left: 31%;
+  animation-duration: 4.5s;
+  animation-delay: 2s;
+}
+
+.error-rain span:nth-child(5) {
+  left: 42%;
+  animation-duration: 3.7s;
+  animation-delay: 0.8s;
+}
+
+.error-rain span:nth-child(6) {
+  left: 51%;
+  animation-duration: 4.3s;
+  animation-delay: 1.7s;
+}
+
+.error-rain span:nth-child(7) {
+  left: 61%;
+  animation-duration: 3.3s;
+  animation-delay: 0.3s;
+}
+
+.error-rain span:nth-child(8) {
+  left: 70%;
+  animation-duration: 4.7s;
+  animation-delay: 2.2s;
+}
+
+.error-rain span:nth-child(9) {
+  left: 78%;
+  animation-duration: 3.9s;
+  animation-delay: 1s;
+}
+
+.error-rain span:nth-child(10) {
+  left: 86%;
+  animation-duration: 4.2s;
+  animation-delay: 2.5s;
+}
+
+.error-rain span:nth-child(11) {
+  left: 94%;
+  animation-duration: 3.6s;
+  animation-delay: 0.7s;
+}
+
+.error-rain span:nth-child(12) {
+  left: 27%;
+  animation-duration: 5s;
+  animation-delay: 3s;
+}
+
+@keyframes errorRain {
+  0% {
+    transform: translateY(-120px) rotate(-8deg);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  50% {
+    transform: translateY(50vh) rotate(8deg);
+  }
+
+  100% {
+    transform: translateY(115vh) rotate(-6deg);
+    opacity: 0.8;
+  }
+}
+
+/* Light Mode */
+:host-context(body.light-mode) .error-rain span {
+  color: #d62828;
+  text-shadow:
+    0 3px 0 #8f1111,
+    0 0 15px rgba(214, 40, 40, 0.35);
+}
+
+/* =================================
+   MONKEY MOVEMENT
+   ================================= */
+
+/*
+ * ลิงยังอยู่ใน flex layout เดิม
+ * ดังนั้น WELCOME จะอยู่บนลิง
+ * และ NICE TRY จะอยู่ใต้ลิงเหมือนเดิม
+ */
+.monkey-container {
+  position: relative;
+  z-index: 10;
+  animation:
+    monkeyLaunch 1.5s cubic-bezier(.12,.8,.2,1) 0.65s both;
+}
+
+/* ตัวนี้ใช้สำหรับพาลิงหนี */
+.monkey-mover {
+  position: relative;
+  transition:
+    transform 0.2s cubic-bezier(.22, .61, .36, 1);
+  will-change: transform;
+}
+
+/* กรอบตรวจจับล่องหนรอบลิง */
+.monkey-mover::before {
+  content: "";
+  position: absolute;
+  width: 360px;
+  height: 320px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+/* รูปลิง */
+.monkey-mover img {
+  display: block;
+  width: min(500px, 88vw);
+  max-height: 52vh;
+  object-fit: contain;
+  border-radius: 20px;
+  box-shadow:
+    0 0 20px rgba(169,112,255,0.4),
+    0 20px 70px rgba(169,112,255,0.25);
+}
+
+/* =================================
+   REVENGE JUMPSCARE
+   ================================= */
+
+.monkey-container.revenge-jumpscare {
+  animation:
+    revengeScale 1.8s cubic-bezier(.16,.84,.24,1) forwards;
+}
+
+/* ขยาย → สั่น smooth → กลับขนาดเดิม */
+@keyframes revengeScale {
+
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+
+  12% {
+    transform: scale(2.2) rotate(-0.6deg);
+  }
+
+  22% {
+    transform: scale(4.5) rotate(0.7deg);
+  }
+
+  30% {
+    transform: scale(5) rotate(-0.8deg);
+  }
+
+  38% {
+    transform: translateX(-10px) scale(5) rotate(0.8deg);
+  }
+
+  46% {
+    transform: translateX(10px) scale(5) rotate(-0.7deg);
+  }
+
+  54% {
+    transform: translateX(-8px) scale(5) rotate(0.6deg);
+  }
+
+  62% {
+    transform: translateX(8px) scale(5) rotate(-0.5deg);
+  }
+
+  72% {
+    transform: scale(4.3) rotate(0.3deg);
+  }
+
+  82% {
+    transform: scale(3) rotate(-0.2deg);
+  }
+
+  92% {
+    transform: scale(1.6) rotate(0deg);
+  }
+
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* =================================
+   LIGHT MODE
+   ================================= */
+
+:host-context(body.light-mode) .monkey-mover img {
+  box-shadow:
+    0 0 20px rgba(63,126,163,0.35),
+    0 20px 70px rgba(63,126,163,0.2);
+}
+
+html,
+body {
+  overflow: hidden !important;
+}
+
+.troll-page {
+  width: 100%;
+  height: 100vh;
+  min-height: 100vh;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+
+.troll-page {
+  width: 100%;
+  height: 100vh;
+  min-height: 0;
+  overflow: hidden !important;
+  box-sizing: border-box;
+}
+
