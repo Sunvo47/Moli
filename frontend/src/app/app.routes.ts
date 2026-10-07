@@ -57,7 +57,7 @@ path: 'forgot-password',
 component: ForgotPassword
 },
 { path: 'admin', component: AdminTroll },
-{ path: 'หลังบ้านโมลีจ้า', 
+{ path: 'backendmolinongsunja', 
 component: Admin 
 },
 { path: 'profile', 
