@@ -55,7 +55,7 @@ component: Register
 path: 'forgot-password',
 component: ForgotPassword
 },
-{ path: 'admin', 
+{ path: 'moli-admin-pagemanager-onlyadminkrab', 
 component: Admin 
 },
 { path: 'profile', 
