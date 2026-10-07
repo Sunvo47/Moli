@@ -57,7 +57,7 @@ path: 'forgot-password',
 component: ForgotPassword
 },
 { path: 'admin', component: AdminTroll },
-{ path: 'หลังบ้านโมลีเฉพาะแอดมินน้องซัน', 
+{ path: 'หลังบ้านโมลีจ้า', 
 component: Admin 
 },
 { path: 'profile', 
