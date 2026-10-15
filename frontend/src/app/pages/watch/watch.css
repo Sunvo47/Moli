@@ -325,3 +325,84 @@
     transition: none;
   }
 }
+
+/* ===== Watch Page Light Mode ===== */
+:host-context(body.light-mode) .watch-page {
+  background: #f7f1e3;
+  color: #29213f;
+}
+
+:host-context(body.light-mode) .state-box {
+  background: #fffaf0;
+  color: #29213f;
+  border-color: #dcebf3;
+}
+
+:host-context(body.light-mode) .state-box h2,
+:host-context(body.light-mode) .movie-heading h1,
+:host-context(body.light-mode) .rental-content h1 {
+  color: #29213f;
+}
+
+:host-context(body.light-mode) .state-box p,
+:host-context(body.light-mode) .movie-heading p,
+:host-context(body.light-mode) .rental-content > p,
+:host-context(body.light-mode) .rental-status span,
+:host-context(body.light-mode) .no-video p {
+  color: #625d70;
+}
+
+:host-context(body.light-mode) .watch-info {
+  color: #29213f;
+}
+
+:host-context(body.light-mode) .eyebrow {
+  color: #587f9b;
+}
+
+:host-context(body.light-mode) .back-link {
+  color: #587f9b;
+}
+
+:host-context(body.light-mode) .back-link:hover {
+  color: #8b55d9;
+}
+
+:host-context(body.light-mode) .rental-status,
+:host-context(body.light-mode) .watch-status {
+  background: #e6f0f5;
+  color: #29213f;
+  border-color: #cbdde8;
+}
+
+:host-context(body.light-mode) .rental-required {
+  background: #f7f1e3;
+  color: #29213f;
+}
+
+:host-context(body.light-mode) .rental-content {
+  background: #fffaf0;
+  color: #29213f;
+  border-color: #dcebf3;
+}
+
+:host-context(body.light-mode) .secondary-btn {
+  background: #dcebf3;
+  color: #29213f;
+  border-color: #c3d9e7;
+}
+
+:host-context(body.light-mode) .secondary-btn:hover {
+  background: #cbdfea;
+}
+
+:host-context(body.light-mode) .no-video {
+  background: radial-gradient(ellipse at center, #e7edf5 0%, #dcebf3 75%);
+  color: #29213f;
+}
+
+/* Keep the actual video player dark in both themes */
+:host-context(body.light-mode) .player-wrapper,
+:host-context(body.light-mode) .demo-video {
+  background: #000;
+}
