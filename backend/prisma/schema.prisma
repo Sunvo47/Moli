@@ -30,6 +30,8 @@ model Movie {
   description    String
   poster         String
   backdrop       String
+  previewImage   String?
+  trailerUrl     String?
   type           String
   genre          String
   duration       Int
