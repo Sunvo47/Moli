@@ -454,3 +454,57 @@ to {
 transform: rotate(360deg);
 }
 }
+
+
+/* Admin movie search, filters and pagination */
+.admin-movie-filters {
+  display: grid;
+  grid-template-columns: minmax(180px, 2fr) repeat(2, minmax(140px, 1fr));
+  gap: 12px;
+  margin: 18px 0;
+}
+.admin-movie-filters input,
+.admin-movie-filters select {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  padding: 11px 12px;
+  border: 1px solid var(--border-color, #353545);
+  border-radius: 10px;
+  background: var(--card-bg, #171722);
+  color: inherit;
+  font: inherit;
+}
+.admin-movie-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+.admin-movie-pagination button {
+  padding: 8px 12px;
+  border: 1px solid var(--border-color, #353545);
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+.admin-movie-pagination button.active {
+  background: var(--accent-color, #a970ff);
+  color: #fff;
+}
+.admin-movie-pagination button:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+.admin-movie-pagination span {
+  width: 100%;
+  text-align: center;
+  font-size: .9rem;
+  opacity: .8;
+}
+@media (max-width: 640px) {
+  .admin-movie-filters { grid-template-columns: 1fr; }
+}

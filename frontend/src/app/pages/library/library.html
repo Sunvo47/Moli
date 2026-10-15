@@ -91,7 +91,7 @@
 
       @for (
 
-        rental of rentals;
+        rental of paginatedRentals;
 
         track trackByRental($index, rental)
 
@@ -207,7 +207,7 @@
 
                 <a
 
-                  [routerLink]="['/movies', rental.movie.id]"
+                  [routerLink]="['/categories', rental.movie.id]"
 
                   class="secondary-button"
 
@@ -229,6 +229,28 @@
 
     </div>
 
+    @if (rentalsTotalPages > 1) {
+      <nav class="library-pagination" aria-label="My Rentals pages">
+        <button type="button" class="library-page-btn"
+          [disabled]="rentalsPage === 1"
+          (click)="setRentalsPage(rentalsPage - 1)"
+          aria-label="Previous page">‹</button>
+        @for (page of rentalsPageNumbers; track page) {
+          <button type="button" class="library-page-btn"
+            [class.active]="page === rentalsPage"
+            [attr.aria-current]="page === rentalsPage ? 'page' : null"
+            (click)="setRentalsPage(page)">{{ page }}</button>
+        }
+        <button type="button" class="library-page-btn"
+          [disabled]="rentalsPage === rentalsTotalPages"
+          (click)="setRentalsPage(rentalsPage + 1)"
+          aria-label="Next page">›</button>
+      </nav>
+      <p class="library-pagination-summary">
+        Page {{ rentalsPage }} of {{ rentalsTotalPages }}
+      </p>
+    }
+
   } @else {
 
     <div class="section-empty">
@@ -245,7 +267,7 @@
 
       <a
 
-        routerLink="/movies"
+        routerLink="/categories"
 
         class="secondary-button"
 
@@ -297,7 +319,7 @@
 
       @for (
 
-        history of watchHistory;
+        history of paginatedWatchHistory;
 
         track trackByHistory($index, history)
 
@@ -307,7 +329,7 @@
 
           class="history-card"
 
-          [routerLink]="['/movies', history.movie.id]"
+          [routerLink]="['/categories', history.movie.id]"
 
         >
 
@@ -355,6 +377,28 @@
 
     </div>
 
+    @if (watchHistoryTotalPages > 1) {
+      <nav class="library-pagination" aria-label="Watch History pages">
+        <button type="button" class="library-page-btn"
+          [disabled]="watchHistoryPage === 1"
+          (click)="setWatchHistoryPage(watchHistoryPage - 1)"
+          aria-label="Previous page">‹</button>
+        @for (page of watchHistoryPageNumbers; track page) {
+          <button type="button" class="library-page-btn"
+            [class.active]="page === watchHistoryPage"
+            [attr.aria-current]="page === watchHistoryPage ? 'page' : null"
+            (click)="setWatchHistoryPage(page)">{{ page }}</button>
+        }
+        <button type="button" class="library-page-btn"
+          [disabled]="watchHistoryPage === watchHistoryTotalPages"
+          (click)="setWatchHistoryPage(watchHistoryPage + 1)"
+          aria-label="Next page">›</button>
+      </nav>
+      <p class="library-pagination-summary">
+        Page {{ watchHistoryPage }} of {{ watchHistoryTotalPages }}
+      </p>
+    }
+
   } @else {
 
     <div class="section-empty">
@@ -371,7 +415,7 @@
 
       <a
 
-        routerLink="/movies"
+        routerLink="/categories"
 
         class="secondary-button"
 
@@ -423,7 +467,7 @@
 
       @for (
 
-        like of likedMovies;
+        like of paginatedLikedMovies;
 
         track trackByLikedMovie($index, like)
 
@@ -435,7 +479,7 @@
 
           class="movie-card"
 
-          [routerLink]="['/movies', movie.id]"
+          [routerLink]="['/categories', movie.id]"
 
         >
 
@@ -476,8 +520,40 @@
         </a>
 
       }
-
     </div>
+
+    @if (likedMoviesTotalPages > 1) {
+      <nav class="library-pagination" aria-label="Liked movies pages">
+        <button
+          type="button"
+          class="library-page-btn"
+          [disabled]="likedMoviesPage === 1"
+          (click)="setLikedMoviesPage(likedMoviesPage - 1)"
+          aria-label="Previous page"
+        >‹</button>
+
+        @for (page of likedMoviesPageNumbers; track page) {
+          <button
+            type="button"
+            class="library-page-btn"
+            [class.active]="page === likedMoviesPage"
+            [attr.aria-current]="page === likedMoviesPage ? 'page' : null"
+            (click)="setLikedMoviesPage(page)"
+          >{{ page }}</button>
+        }
+
+        <button
+          type="button"
+          class="library-page-btn"
+          [disabled]="likedMoviesPage === likedMoviesTotalPages"
+          (click)="setLikedMoviesPage(likedMoviesPage + 1)"
+          aria-label="Next page"
+        >›</button>
+      </nav>
+      <p class="library-pagination-summary">
+        Page {{ likedMoviesPage }} of {{ likedMoviesTotalPages }}
+      </p>
+    }
 
   } @else {
 
@@ -495,7 +571,7 @@
 
       <a
 
-        routerLink="/movies"
+        routerLink="/categories"
 
         class="secondary-button"
 

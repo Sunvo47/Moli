@@ -8,6 +8,8 @@ title: string;
 description: string;
 poster: string;
 backdrop: string;
+previewImage: string;
+trailerUrl: string;
 type: string;
 genre: string;
 duration: number | null;
@@ -22,6 +24,8 @@ title: string;
 description: string;
 poster: string;
 backdrop: string;
+previewImage: string | null;
+trailerUrl: string | null;
 type: string;
 genre: string;
 duration: number;
@@ -40,6 +44,11 @@ styleUrl: './admin.css'
 })
 export class Admin implements OnInit {
 movies: Movie[] = [];
+searchQuery = '';
+selectedGenre = 'All';
+selectedType = 'All';
+currentPage = 1;
+pageSize = 10;
 
 loading = true;
 saving = false;
@@ -50,6 +59,48 @@ success = '';
 editingId: number | null = null;
 
 form: MovieForm = this.createEmptyForm();
+
+
+get genreOptions(): string[] {
+  return [...new Set(this.movies.map(movie => (movie.genre || '').trim()).filter(Boolean))]
+    .sort((a, b) => a.localeCompare(b));
+}
+
+get typeOptions(): string[] {
+  return [...new Set(this.movies.map(movie => (movie.type || '').trim()).filter(Boolean))]
+    .sort((a, b) => a.localeCompare(b));
+}
+
+get filteredMovies(): Movie[] {
+  const query = this.searchQuery.trim().toLowerCase();
+  return this.movies.filter(movie => {
+    const matchesSearch = !query || (movie.title || '').toLowerCase().includes(query);
+    const matchesGenre = this.selectedGenre === 'All' ||
+      (movie.genre || '').toLowerCase() === this.selectedGenre.toLowerCase();
+    const matchesType = this.selectedType === 'All' ||
+      (movie.type || '').toLowerCase() === this.selectedType.toLowerCase();
+    return matchesSearch && matchesGenre && matchesType;
+  });
+}
+
+get totalPages(): number {
+  return Math.max(1, Math.ceil(this.filteredMovies.length / this.pageSize));
+}
+
+get pageNumbers(): number[] {
+  return Array.from({ length: this.totalPages }, (_, index) => index + 1);
+}
+
+get paginatedMovies(): Movie[] {
+  const start = (Math.min(this.currentPage, this.totalPages) - 1) * this.pageSize;
+  return this.filteredMovies.slice(start, start + this.pageSize);
+}
+
+setPage(page: number): void {
+  if (page >= 1 && page <= this.totalPages) {
+    this.currentPage = page;
+  }
+}
 
 constructor(private api: ApiService) {}
 
@@ -63,6 +114,8 @@ title: '',
 description: '',
 poster: '',
 backdrop: '',
+previewImage: '',
+trailerUrl: '',
 type: 'Movie',
 genre: '',
 duration: null,
@@ -80,6 +133,7 @@ this.error = '';
 this.api.getMovies().subscribe({
 next: (movies) => {
 this.movies = movies;
+this.currentPage = 1;
 this.loading = false;
 },
 error: () => {
@@ -107,6 +161,8 @@ title: movie.title,
 description: movie.description,
 poster: this.getImageUrl(movie.poster),
 backdrop: this.getImageUrl(movie.backdrop),
+previewImage: this.getImageUrl(movie.previewImage || ''),
+trailerUrl: movie.trailerUrl || '',
 type: movie.type,
 genre: movie.genre,
 duration: movie.duration,
@@ -156,6 +212,8 @@ title: this.form.title.trim(),
 description: this.form.description.trim(),
 poster: this.cleanUrl(this.form.poster),
 backdrop: this.cleanUrl(this.form.backdrop),
+previewImage: this.cleanUrl(this.form.previewImage) || null,
+trailerUrl: this.cleanUrl(this.form.trailerUrl) || null,
 type: this.form.type,
 genre: this.form.genre.trim(),
 duration: Number(this.form.duration),

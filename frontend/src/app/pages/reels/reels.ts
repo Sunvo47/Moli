@@ -1,7 +1,36 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 import { ApiService, Reel } from '../../services/api';
+
+interface MoliYouTubePlayer {
+  getVolume(): number;
+  isMuted(): boolean;
+  setVolume(volume: number): void;
+  mute(): void;
+  unMute(): void;
+  playVideo(): void;
+  pauseVideo(): void;
+}
+
+interface MoliYouTubeApi {
+  Player: new (
+    element: HTMLElement,
+    options: {
+      events: {
+        onReady: (event: { target: MoliYouTubePlayer }) => void;
+      };
+    }
+  ) => MoliYouTubePlayer;
+}
+
+declare global {
+  interface Window {
+    YT?: MoliYouTubeApi;
+    onYouTubeIframeAPIReady?: () => void;
+  }
+}
+
 
 @Component({
 selector: 'app-reels',
@@ -18,6 +47,14 @@ error = '';
 likedReels = new Set<number>();
 likeLoading = new Set<number>();
 viewedReels = new Set<number>();
+private youtubeEmbedUrlCache = new Map<string, SafeResourceUrl>();
+@ViewChild('reelsFeed') reelsFeed?: ElementRef<HTMLElement>;
+reelsVolume = 70;
+reelsMuted = false;
+private activeReelCard: HTMLElement | null = null;
+private youtubePlayers = new Map<HTMLIFrameElement, MoliYouTubePlayer>();
+private volumePollTimer: ReturnType<typeof setInterval> | null = null;
+
 
 constructor(
 private api: ApiService,
@@ -42,6 +79,7 @@ this.api.getReels().subscribe({
     this.loading = false;
 
     this.cdr.detectChanges();
+    this.loadYouTubeApi();
 
     this.reels.forEach((reel) => {
       this.loadLikeStatus(reel);
@@ -213,23 +251,216 @@ try {
 }
 
 getYouTubeEmbedUrl(value: string | undefined): SafeResourceUrl {
-const videoId = this.getYouTubeVideoId(value);
+  const cleanUrl = this.getImageUrl(value);
+  const cached = this.youtubeEmbedUrlCache.get(cleanUrl);
+  if (cached) return cached;
+
+  const videoId = this.getYouTubeVideoId(cleanUrl);
+  if (!videoId) {
+    return this.sanitizer.bypassSecurityTrustResourceUrl('about:blank');
+  }
+
+  const embedUrl =
+    `https://www.youtube-nocookie.com/embed/${videoId}` +
+    '?autoplay=1&mute=0&controls=1&rel=0&modestbranding=1&playsinline=1&loop=1' +
+    `&playlist=${videoId}&enablejsapi=1&origin=${encodeURIComponent(window.location.origin)}`;
+
+  const safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(embedUrl);
+  this.youtubeEmbedUrlCache.set(cleanUrl, safeUrl);
+  return safeUrl;
+}
 
 
-const embedUrl =
-  `https://www.youtube-nocookie.com/embed/${videoId}` +
-  '?autoplay=1' +
-  '&mute=1' +
-  '&controls=1' +
-  '&rel=0' +
-  '&modestbranding=1' +
-  '&playsinline=1' +
-  '&loop=1' +
-  `&playlist=${videoId}`;
+private loadYouTubeApi(): void {
+  if (window.YT?.Player) {
+    this.initializeYouTubePlayers();
+    return;
+  }
 
-return this.sanitizer.bypassSecurityTrustResourceUrl(embedUrl);
+  const previousCallback = window.onYouTubeIframeAPIReady;
+  window.onYouTubeIframeAPIReady = () => {
+    previousCallback?.();
+    this.initializeYouTubePlayers();
+  };
 
+  if (!document.querySelector('script[src="https://www.youtube.com/iframe_api"]')) {
+    const script = document.createElement('script');
+    script.src = 'https://www.youtube.com/iframe_api';
+    script.async = true;
+    document.head.appendChild(script);
+  }
+}
 
+private initializeYouTubePlayers(): void {
+  if (!window.YT?.Player) return;
+
+  const feed = this.reelsFeed?.nativeElement;
+  if (!feed) return;
+
+  feed.querySelectorAll<HTMLIFrameElement>('iframe.reel-video').forEach((iframe) => {
+    if (this.youtubePlayers.has(iframe)) return;
+
+    try {
+      new window.YT!.Player(iframe, {
+        events: {
+          onReady: (event) => {
+            this.youtubePlayers.set(iframe, event.target);
+            event.target.setVolume(this.reelsVolume);
+
+            if (this.reelsMuted) event.target.mute();
+            else event.target.unMute();
+
+            if (iframe.closest('.reel-card') === this.activeReelCard) {
+              event.target.playVideo();
+            } else {
+              event.target.pauseVideo();
+            }
+
+            this.startVolumePolling();
+          }
+        }
+      });
+    } catch {
+      // คงคำสั่ง postMessage เดิมไว้เป็น fallback
+    }
+  });
+}
+
+private startVolumePolling(): void {
+  if (this.volumePollTimer) return;
+
+  this.volumePollTimer = setInterval(() => {
+    const iframe = this.activeReelCard?.querySelector<HTMLIFrameElement>(
+      'iframe.reel-video'
+    );
+    if (!iframe) return;
+
+    const player = this.youtubePlayers.get(iframe);
+    if (!player) return;
+
+    const volume = player.getVolume();
+    if (Number.isFinite(volume)) {
+      this.reelsVolume = Math.max(0, Math.min(100, volume));
+    }
+    this.reelsMuted = player.isMuted();
+  }, 300);
+}
+
+handleFeedScroll(): void {
+  const feed = this.reelsFeed?.nativeElement;
+  if (!feed) return;
+
+  const feedRect = feed.getBoundingClientRect();
+  const feedCenter = feedRect.top + feedRect.height / 2;
+  const cards = Array.from(feed.querySelectorAll<HTMLElement>('.reel-card'));
+  if (!cards.length) return;
+
+  let activeCard: HTMLElement | null = null;
+  let nearestDistance = Number.POSITIVE_INFINITY;
+
+  for (const card of cards) {
+    const rect = card.getBoundingClientRect();
+    const distance = Math.abs(rect.top + rect.height / 2 - feedCenter);
+    if (distance < nearestDistance) {
+      nearestDistance = distance;
+      activeCard = card;
+    }
+  }
+
+  if (!activeCard || activeCard === this.activeReelCard) return;
+
+  // อ่านค่าจริงจากคลิปเดิมก่อนเปลี่ยนไปคลิปใหม่
+  const previousCard = this.activeReelCard;
+  if (previousCard) {
+    const previousIframe =
+      previousCard.querySelector<HTMLIFrameElement>('iframe.reel-video');
+    const previousPlayer = previousIframe
+      ? this.youtubePlayers.get(previousIframe)
+      : undefined;
+
+    if (previousPlayer) {
+      this.reelsVolume = previousPlayer.getVolume();
+      this.reelsMuted = previousPlayer.isMuted();
+      previousPlayer.pauseVideo();
+    } else if (previousIframe) {
+      this.sendYouTubeCommand(previousIframe, 'pauseVideo');
+    }
+
+    const previousVideo = previousCard.querySelector<HTMLVideoElement>('video.reel-video');
+    if (previousVideo) previousVideo.pause();
+  }
+
+  this.activeReelCard = activeCard;
+
+  const iframe = activeCard.querySelector<HTMLIFrameElement>('iframe.reel-video');
+  const video = activeCard.querySelector<HTMLVideoElement>('video.reel-video');
+
+  if (iframe) {
+    const player = this.youtubePlayers.get(iframe);
+    if (player) {
+      player.setVolume(this.reelsVolume);
+      if (this.reelsMuted) player.mute();
+      else player.unMute();
+      player.playVideo();
+    } else {
+      this.sendYouTubeCommand(iframe, 'setVolume', [this.reelsVolume]);
+      this.sendYouTubeCommand(iframe, this.reelsMuted ? 'mute' : 'unMute');
+      this.sendYouTubeCommand(iframe, 'playVideo');
+    }
+  }
+
+  if (video) {
+    video.volume = this.reelsVolume / 100;
+    video.muted = this.reelsMuted;
+    void video.play().catch(() => {});
+  }
+}
+
+private sendYouTubeCommand(
+  iframe: HTMLIFrameElement,
+  func: string,
+  args: unknown[] = []
+): void {
+  iframe.contentWindow?.postMessage(
+    JSON.stringify({ event: 'command', func, args }),
+    '*'
+  );
+}
+
+setReelsVolume(value: string | number): void {
+  const volume = Number(value);
+  if (!Number.isFinite(volume)) return;
+
+  this.reelsVolume = Math.max(0, Math.min(100, volume));
+  this.reelsMuted = this.reelsVolume === 0;
+  this.applyReelsAudio();
+}
+
+toggleReelsMute(): void {
+  this.reelsMuted = !this.reelsMuted;
+  this.applyReelsAudio();
+}
+
+private applyReelsAudio(): void {
+  const feed = this.reelsFeed?.nativeElement;
+  if (!feed) return;
+
+  feed.querySelectorAll<HTMLIFrameElement>('iframe.reel-video').forEach((iframe) => {
+    const player = this.youtubePlayers.get(iframe);
+    if (player) {
+      player.setVolume(this.reelsVolume);
+      if (this.reelsMuted) player.mute();
+      else player.unMute();
+    } else {
+      this.sendYouTubeCommand(iframe, 'setVolume', [this.reelsVolume]);
+      this.sendYouTubeCommand(iframe, this.reelsMuted ? 'mute' : 'unMute');
+    }
+  });
+
+  feed.querySelectorAll<HTMLVideoElement>('video.reel-video').forEach((video) => {
+    video.volume = this.reelsVolume / 100;
+    video.muted = this.reelsMuted;
+  });
 }
 
 trackReel(_index: number, reel: Reel): number {

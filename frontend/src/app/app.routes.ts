@@ -25,12 +25,21 @@ path: 'home',
 component: Home
 },
 {
-path: 'movies',
+path: 'categories',
 component: Movies
 },
 {
-path: 'movies/:id',
+path: 'categories/:id',
 component: MovieDetail
+},
+{
+path: 'movies',
+redirectTo: 'categories',
+pathMatch: 'full'
+},
+{
+path: 'movies/:id',
+redirectTo: 'categories/:id'
 },
 {
 path: 'watch/:id',
@@ -57,14 +66,14 @@ path: 'forgot-password',
 component: ForgotPassword
 },
 { path: 'admin', component: AdminTroll },
-{ path: 'backendmolinongsunja', 
-component: Admin 
+{ path: 'backendmolinongsunja',
+component: Admin
 },
-{ path: 'profile', 
-component: ProfilePage 
+{ path: 'profile',
+component: ProfilePage
 },
-{ path: 'settings', 
-component: SettingsPage 
+{ path: 'settings',
+component: SettingsPage
 },
 {
 path: '**',

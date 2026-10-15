@@ -1,5 +1,55 @@
 <section class="home-page">
 
+  <section class="home-search" aria-label="Search movies">
+    <div class="home-search-inner">
+
+
+      <div class="home-search-input-wrap">
+        <span class="home-search-icon" aria-hidden="true">⌕</span>
+        <input
+          id="home-movie-search"
+          name="homeMovieSearch"
+          type="search"
+          [(ngModel)]="searchText"
+          placeholder="Search titles, genres, or types..."
+          autocomplete="off"
+        />
+        @if (searchText) {
+          <button
+            type="button"
+            class="home-search-clear"
+            aria-label="Clear search"
+            (click)="searchText = ''"
+          >×</button>
+        }
+      </div>
+
+      @if (searchText.trim()) {
+        <div class="home-search-results">
+          @for (movie of filteredSearchResults; track movie.id) {
+            <a
+              class="home-search-result"
+              [routerLink]="['/categories', movie.id]"
+              (click)="searchText = ''"
+            >
+              <img [src]="movie.poster" [alt]="movie.title" />
+              <span class="home-search-result-info">
+                <strong>{{ movie.title }}</strong>
+                <small>{{ movie.genre }} · {{ movie.type }}</small>
+              </span>
+              <span class="home-search-result-arrow">›</span>
+            </a>
+          }
+
+          @if (filteredSearchResults.length === 0) {
+            <p class="home-search-empty">No matching movies found.</p>
+          }
+        </div>
+      }
+    </div>
+  </section>
+
+
   @if (loading) {
     <div class="state-box">
       <div class="loader"></div>
@@ -43,13 +93,23 @@
         </p>
 
         <div class="hero-actions">
-          <a class="watch-btn" [routerLink]="['/movies', featuredMovie.id]">
+          <a class="watch-btn" [routerLink]="['/categories', featuredMovie.id]">
             ▶ Watch Now
           </a>
 
-          <a class="info-btn" [routerLink]="['/movies', featuredMovie.id]">
+          <a class="info-btn" [routerLink]="['/categories', featuredMovie.id]">
             More Info
           </a>
+
+          @if (featuredMovie.trailerUrl) {
+            <button
+              type="button"
+              class="trailer-btn"
+              (click)="openTrailer(featuredMovie)"
+            >
+              ▶ Watch Trailer
+            </button>
+          }
         </div>
 
       </div>
@@ -59,7 +119,7 @@
     <section class="movie-section trending-section">
       <div class="section-heading">
         <h2>Trending Now</h2>
-        <a routerLink="/movies">View All</a>
+        <a routerLink="/categories">View All</a>
       </div>
 
       @if (trendingMovies.length) {
@@ -68,7 +128,7 @@
             @for (movie of trendingMovies; track movie.id) {
               <a
                 class="movie-card trending-card"
-                [routerLink]="['/movies', movie.id]"
+                [routerLink]="['/categories', movie.id]"
               >
                 <div class="poster-wrapper">
                   <img
@@ -93,7 +153,7 @@
             @for (movie of trendingMovies; track 'loop-' + movie.id) {
               <a
                 class="movie-card trending-card"
-                [routerLink]="['/movies', movie.id]"
+                [routerLink]="['/categories', movie.id]"
                 tabindex="-1"
                 aria-hidden="true"
               >
@@ -129,7 +189,7 @@
     <section class="movie-section new-releases-section">
       <div class="section-heading">
         <h2>New Releases</h2>
-        <a routerLink="/movies">View All</a>
+        <a routerLink="/categories">View All</a>
       </div>
 
       @if (newReleases.length) {
@@ -137,7 +197,7 @@
           @for (movie of newReleases; track movie.id) {
             <a
               class="movie-card"
-              [routerLink]="['/movies', movie.id]"
+              [routerLink]="['/categories', movie.id]"
             >
               <div class="poster-wrapper">
                 <img
@@ -171,6 +231,33 @@
     <div class="state-box">
       <h2>No movies yet</h2>
       <p>Add movies from the admin system to see them here.</p>
+    </div>
+  }
+
+
+  @if (trailerMovie?.trailerUrl) {
+    <div class="trailer-modal" (click)="closeTrailer()">
+      <div
+        class="trailer-modal-content"
+        role="dialog"
+        aria-modal="true"
+        [attr.aria-label]="trailerMovie!.title + ' trailer'"
+        (click)="$event.stopPropagation()"
+      >
+        <div class="trailer-modal-heading">
+          <strong>{{ trailerMovie!.title }} — Trailer</strong>
+          <button type="button" aria-label="Close trailer" (click)="closeTrailer()">×</button>
+        </div>
+        <div class="trailer-modal-player">
+          <iframe
+            [src]="getTrailerEmbedUrl(trailerMovie!.trailerUrl!)"
+            [title]="trailerMovie!.title + ' trailer'"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </div>
     </div>
   }
 

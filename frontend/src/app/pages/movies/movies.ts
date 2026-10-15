@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { timeout } from 'rxjs';
 import { ApiService, Movie } from '../../services/api';
 @Component({
@@ -14,9 +14,56 @@ templateUrl: './movies.html',
 styleUrl: './movies.css'
 })
 export class Movies implements OnInit {
+allMovies: Movie[] = [];
+pageSize = 15;
+currentPage = 1;
+
+get totalPages(): number {
+  return Math.max(1, Math.ceil(this.movies.length / this.pageSize));
+}
+
+get paginatedMovies(): Movie[] {
+  const start = (this.currentPage - 1) * this.pageSize;
+  return this.movies.slice(start, start + this.pageSize);
+}
+
+get pageNumbers(): number[] {
+  return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+}
+
+setPage(page: number): void {
+  if (page < 1 || page > this.totalPages) return;
+  this.currentPage = page;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 movies: Movie[] = [];
 likedMovieIds = new Set<number>();
 searchText = '';
+
+get filteredSearchResults(): Movie[] {
+  const query = this.searchText.trim().toLowerCase();
+  if (!query) return [];
+
+  return this.allMovies
+    .map((movie, index) => {
+      const title = String(movie.title ?? '').toLowerCase();
+      return {
+        movie,
+        index,
+        starts: title.startsWith(query),
+        matches: title.includes(query)
+      };
+    })
+    .filter(item => item.matches)
+    .sort((a, b) =>
+      Number(b.starts) - Number(a.starts) ||
+      a.movie.title.localeCompare(b.movie.title) ||
+      a.index - b.index
+    )
+    .slice(0, 6)
+    .map(item => item.movie);
+}
+
 selectedGenre = 'All';
 selectedType = 'All';
 genres: string[] = [];
@@ -27,6 +74,7 @@ likeLoadingIds = new Set<number>();
 constructor(
 private api: ApiService,
 private router: Router,
+private route: ActivatedRoute,
 private cdr: ChangeDetectorRef
 ) {}
 ngOnInit(): void {
@@ -38,7 +86,9 @@ this.error = '';
 this.cdr.markForCheck();
 this.api.getMovies().pipe(timeout(10000)).subscribe({
   next: (movies) => {
+    this.allMovies = movies;
     this.movies = movies;
+    this.currentPage = 1;
 
     this.genres = [
       'All',
@@ -50,6 +100,20 @@ this.api.getMovies().pipe(timeout(10000)).subscribe({
         )
       ).sort()
     ];
+
+    const requestedGenre = this.route.snapshot.queryParamMap.get('genre')?.trim();
+
+if (requestedGenre) {
+  const matchingGenre = this.genres.find(
+    genre => genre.toLowerCase() === requestedGenre.toLowerCase()
+  );
+
+  if (matchingGenre) {
+    this.selectedGenre = matchingGenre;
+    this.applyFilters();
+    return;
+  }
+}
 
     this.loadLikedMovies();
 
@@ -109,6 +173,7 @@ this.api.getMovies(
 ).pipe(timeout(10000)).subscribe({
   next: (movies) => {
     this.movies = movies;
+    this.currentPage = 1;
     this.loading = false;
 
     this.loadLikedMovies();
@@ -130,7 +195,15 @@ clearFilters(): void {
 this.searchText = '';
 this.selectedGenre = 'All';
 this.selectedType = 'All';
-this.loadMovies();
+
+this.router.navigate([], {
+  relativeTo: this.route,
+  queryParams: { genre: null },
+  queryParamsHandling: 'merge',
+  replaceUrl: true
+}).then(() => {
+  this.loadMovies();
+});
 }
 isLiked(movieId: number): boolean {
 return this.likedMovieIds.has(movieId);

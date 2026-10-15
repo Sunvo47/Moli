@@ -1,5 +1,4 @@
 <section class="watch-page">
-
   @if (loading) {
     <div class="state-box">
       <div class="loader"></div>
@@ -11,12 +10,11 @@
     <div class="state-box error">
       <h2>Something went wrong</h2>
       <p>{{ error }}</p>
-      <a routerLink="/movies" class="back-btn">Back to Movies</a>
+      <a routerLink="/categories" class="back-btn">Back to Categories</a>
     </div>
   }
 
   @if (!loading && movie) {
-
     @if (checkingRental) {
       <div class="state-box">
         <div class="loader"></div>
@@ -26,73 +24,71 @@
 
     @if (!checkingRental && canWatch) {
       <section class="player-section">
-
         <div class="player-wrapper">
-          <video
-            class="demo-video"
-            controls
-            preload="metadata"
-            (play)="onPlay()"
-          >
-            <source
-              src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
-              type="video/mp4"
-            />
-            Your browser does not support video playback.
-          </video>
-        </div>
+          @if (isYouTubeTrailer(effectiveTrailerUrl)) {
+            <iframe
+              id="moli-youtube-player"
+              class="demo-video"
+              [src]="trailerEmbedUrl"
+              [title]="movie.title + ' trailer'"
+              (load)="onYouTubeIframeLoad()"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+            ></iframe>
+          } @else if (isDirectVideoUrl(effectiveTrailerUrl)) {
+            <video
+              class="demo-video"
+              [src]="trailerVideoUrl"
+              [title]="movie.title + ' trailer'"
+              controls
+              playsinline
+              preload="metadata"
+              (play)="onPlay()"
+            ></video>
+          } @else {
+            <p class="demo-attribution">
+              ยังไม่มี Trailer สำหรับเรื่องนี้
+            </p>
+          }
+            </div>
 
         <div class="watch-info">
-
           <div class="movie-heading">
             <div>
-              <span class="eyebrow">NOW PLAYING</span>
+              <span class="eyebrow">TRAILER / PREVIEW</span>
               <h1>{{ movie.title }}</h1>
               <p>{{ movie.description }}</p>
             </div>
 
-            <a
-              [routerLink]="['/movies', movie.id]"
-              class="back-link"
-            >
+            <a [routerLink]="['/categories', movie.id]" class="back-link">
               ← Movie Details
             </a>
           </div>
 
           <div class="rental-status">
             <span class="status-dot"></span>
-
             <div>
               <strong>Rental Active</strong>
-
               @if (rentalExpiresAt) {
-                <span>
-                  Access until {{ formatExpiry(rentalExpiresAt) }}
-                </span>
+                <span>Access until {{ formatExpiry(rentalExpiresAt) }}</span>
               }
             </div>
           </div>
 
           @if (recordingWatch) {
-            <p class="watch-status">
-              Recording watch history...
-            </p>
+            <p class="watch-status">Recording watch history...</p>
           }
 
           @if (watchedThisSession) {
-            <p class="watch-status success">
-              Watch history recorded · View count updated
-            </p>
+            <p class="watch-status success">Watch history recorded · View count updated</p>
           }
-
         </div>
-
       </section>
     }
 
     @if (!checkingRental && !canWatch) {
       <section class="rental-required">
-
         <div
           class="rental-backdrop"
           [style.background-image]="
@@ -103,40 +99,21 @@
         ></div>
 
         <div class="rental-content">
-
           <div class="lock-icon">🔒</div>
-
-          <span class="eyebrow">RENTAL REQUIRED</span>
-
+          <span class="eyebrow">LOGIN & RENTAL REQUIRED</span>
           <h1>{{ movie.title }}</h1>
-
-          <p>
-            You need an active rental to watch this movie.
-          </p>
+          <p>You must log in and have an active rental to watch this title.</p>
 
           <div class="rental-actions">
-
-            <a
-              [routerLink]="['/movies', movie.id]"
-              class="rent-btn"
-            >
+            <a [routerLink]="['/categories', movie.id]" class="rent-btn">
               Go to Movie Details
             </a>
-
-            <a
-              routerLink="/movies"
-              class="secondary-btn"
-            >
-              Back to Movies
+            <a routerLink="/categories" class="secondary-btn">
+              Back to Categories
             </a>
-
           </div>
-
         </div>
-
       </section>
     }
-
   }
-
 </section>

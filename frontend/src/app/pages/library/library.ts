@@ -16,6 +16,91 @@ rentals: Rental[] = [];
 watchHistory: WatchHistory[] = [];
 likedMovies: any[] = [];
 
+likedMoviesPage = 1;
+likedMoviesPageSize = 15;
+
+rentalsPage = 1;
+rentalsPageSize = 6;
+
+watchHistoryPage = 1;
+watchHistoryPageSize = 6;
+
+get rentalsTotalPages(): number {
+  return Math.ceil(this.rentals.length / this.rentalsPageSize);
+}
+
+get paginatedRentals(): Rental[] {
+  const start = (this.rentalsPage - 1) * this.rentalsPageSize;
+  return this.rentals.slice(start, start + this.rentalsPageSize);
+}
+
+get rentalsPageNumbers(): number[] {
+  return Array.from({ length: this.rentalsTotalPages }, (_, i) => i + 1);
+}
+
+setRentalsPage(page: number): void {
+  if (page < 1 || page > this.rentalsTotalPages || page === this.rentalsPage) {
+    return;
+  }
+  this.rentalsPage = page;
+  this.cdr.detectChanges();
+}
+
+get watchHistoryTotalPages(): number {
+  return Math.ceil(this.watchHistory.length / this.watchHistoryPageSize);
+}
+
+get paginatedWatchHistory(): WatchHistory[] {
+  const start = (this.watchHistoryPage - 1) * this.watchHistoryPageSize;
+  return this.watchHistory.slice(start, start + this.watchHistoryPageSize);
+}
+
+get watchHistoryPageNumbers(): number[] {
+  return Array.from({ length: this.watchHistoryTotalPages }, (_, i) => i + 1);
+}
+
+setWatchHistoryPage(page: number): void {
+  if (
+    page < 1 ||
+    page > this.watchHistoryTotalPages ||
+    page === this.watchHistoryPage
+  ) {
+    return;
+  }
+  this.watchHistoryPage = page;
+  this.cdr.detectChanges();
+}
+
+get likedMoviesTotalPages(): number {
+return Math.ceil(this.likedMovies.length / this.likedMoviesPageSize);
+}
+
+get paginatedLikedMovies(): any[] {
+const start = (this.likedMoviesPage - 1) * this.likedMoviesPageSize;
+return this.likedMovies.slice(start, start + this.likedMoviesPageSize);
+}
+
+get likedMoviesPageNumbers(): number[] {
+return Array.from(
+{ length: this.likedMoviesTotalPages },
+(_, index) => index + 1
+);
+}
+
+setLikedMoviesPage(page: number): void {
+if (
+page < 1 ||
+page > this.likedMoviesTotalPages ||
+page === this.likedMoviesPage
+) {
+return;
+}
+
+this.likedMoviesPage = page;
+this.cdr.detectChanges();
+}
+
+
 loading = false;
 error = '';
 
@@ -59,11 +144,13 @@ const finishRequest = () => {
 this.api.getMyLikedMovies().subscribe({
   next: (likedMovies) => {
     this.likedMovies = likedMovies ?? [];
+    this.likedMoviesPage = 1;
     finishRequest();
   },
   error: (error) => {
     console.error('Failed to load My List:', error);
     this.likedMovies = [];
+    this.likedMoviesPage = 1;
     failed++;
     finishRequest();
   }
@@ -72,6 +159,7 @@ this.api.getMyLikedMovies().subscribe({
 this.api.getMyRentals().subscribe({
   next: (rentals) => {
     this.rentals = rentals ?? [];
+    this.rentalsPage = 1;
     finishRequest();
   },
   error: (error) => {
@@ -85,6 +173,7 @@ this.api.getMyRentals().subscribe({
 this.api.getWatchHistory().subscribe({
   next: (history) => {
     this.watchHistory = history ?? [];
+    this.watchHistoryPage = 1;
     finishRequest();
   },
   error: (error) => {

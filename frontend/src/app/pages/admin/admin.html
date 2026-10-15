@@ -211,6 +211,29 @@
       >
     </label>
 
+    <label>
+      <span>Preview Image URL (optional)</span>
+      <input
+        type="url"
+        name="previewImage"
+        [(ngModel)]="form.previewImage"
+        placeholder="https://..."
+      >
+      <small>เว้นว่างเพื่อใช้ Backdrop เดิม</small>
+    </label>
+
+<label>
+  <span>YouTube Trailer URL (optional)</span>
+  <input
+    type="url"
+    name="trailerUrl"
+    [(ngModel)]="form.trailerUrl"
+    placeholder="https://www.youtube.com/watch?v=..."
+  >
+  <small>ใส่ลิงก์ตัวอย่างหนังจาก YouTube หรือเว้นว่างได้</small>
+</label>
+
+
     @if (form.poster) {
 
       <div class="poster-preview">
@@ -256,11 +279,45 @@
 
       <h2>
         Movies
-        <small>{{ movies.length }}</small>
+        <small>{{ filteredMovies.length }} / {{ movies.length }}</small>
       </h2>
     </div>
 
   </div>
+
+
+    <div class="admin-movie-filters">
+      <input
+        type="search"
+        name="adminMovieSearch"
+        placeholder="Search movie title..."
+        aria-label="Search movie title"
+        [(ngModel)]="searchQuery"
+        (ngModelChange)="currentPage = 1"
+      >
+      <select
+        name="adminGenreFilter"
+        aria-label="Filter by genre"
+        [(ngModel)]="selectedGenre"
+        (ngModelChange)="currentPage = 1"
+      >
+        <option value="All">All Genres</option>
+        @for (genre of genreOptions; track genre) {
+          <option [value]="genre">{{ genre }}</option>
+        }
+      </select>
+      <select
+        name="adminTypeFilter"
+        aria-label="Filter by type"
+        [(ngModel)]="selectedType"
+        (ngModelChange)="currentPage = 1"
+      >
+        <option value="All">All Types</option>
+        @for (type of typeOptions; track type) {
+          <option [value]="type">{{ type }}</option>
+        }
+      </select>
+    </div>
 
   @if (loading) {
 
@@ -284,11 +341,15 @@
 
     </div>
 
+  } @else if (!filteredMovies.length) {
+    <div class="state empty">
+      <div class="state-icon">🎬</div>
+      <p>No movies match your filters.</p>
+    </div>
   } @else {
-
     <div class="movie-list">
 
-      @for (movie of movies; track movie.id) {
+      @for (movie of paginatedMovies; track movie.id) {
 
         <article class="movie-item">
 
@@ -342,7 +403,23 @@
 
       }
 
-    </div>
+
+    @if (totalPages > 1) {
+      <nav class="admin-movie-pagination" aria-label="Movie list pages">
+        <button type="button" [disabled]="currentPage <= 1"
+          (click)="setPage(currentPage - 1)">Previous</button>
+        @for (page of pageNumbers; track page) {
+          <button type="button"
+            [class.active]="currentPage === page"
+            [attr.aria-current]="currentPage === page ? 'page' : null"
+            (click)="setPage(page)">{{ page }}</button>
+        }
+        <button type="button" [disabled]="currentPage >= totalPages"
+          (click)="setPage(currentPage + 1)">Next</button>
+        <span>Page {{ currentPage }} of {{ totalPages }}</span>
+      </nav>
+    }
+</div>
 
   }
 

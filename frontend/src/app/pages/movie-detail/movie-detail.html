@@ -10,8 +10,8 @@
 
   <p>{{ error }}</p>
 
-  <a routerLink="/movies" class="back-btn">
-    Back to Movies
+  <a routerLink="/categories" class="back-btn">
+    Back to Categories
   </a>
 </div>
 
@@ -31,9 +31,9 @@
 
   <div class="hero-content">
 
-    <a routerLink="/movies" class="back-link">
+    <a routerLink="/categories" class="back-link">
       <span>←</span>
-      Back to Movies
+      Back to Categories
     </a>
 
     <h1>{{ movie.title }}</h1>
@@ -46,9 +46,11 @@
 
       <span class="meta-dot"></span>
 
-      <span>
-        {{ movie.genre }}
-      </span>
+      <a
+        class="movie-genre-link"
+        [routerLink]="['/categories']"
+        [queryParams]="{ genre: movie.genre }"
+      >{{ movie.genre }}</a>
 
       <span class="meta-dot"></span>
 
@@ -92,18 +94,25 @@
         {{ liked ? 'My List' : 'Add to My List' }}
       </button>
 
-      <button
-        type="button"
-        class="rent-btn"
-        [disabled]="rentLoading"
-        (click)="rentMovie()"
-      >
-        {{
-          rentLoading
-            ? 'Renting...'
-            : 'Rent for ' + (movie.rentalPrice | number) + ' THB'
-        }}
-      </button>
+      @if (rentalExpiresAt && remainingRentalMs > 0) {
+        <div class="rental-countdown" role="status" aria-live="polite">
+          <span class="rental-countdown-label">เช่าแล้ว · เวลาที่เหลือ</span>
+          <strong>{{ getRentalTimeRemaining() }}</strong>
+        </div>
+      } @else {
+        <button
+          type="button"
+          class="rent-btn"
+          [disabled]="rentLoading"
+          (click)="rentMovie()"
+        >
+          {{
+            rentLoading
+              ? 'Renting...'
+              : 'Rent for ' + (movie.rentalPrice | number) + ' THB'
+          }}
+        </button>
+      }
 
     </div>
 
@@ -140,9 +149,13 @@
 
     </div>
 
-    <div class="movie-type">
-      {{ movie.type }}
-    </div>
+    <a
+      class="movie-type"
+      [routerLink]="['/categories']"
+      [queryParams]="{ genre: movie.genre }"
+    >
+      {{ movie.genre }}
+    </a>
 
     <div class="poster-caption">
       <span>Now watching</span>
@@ -157,37 +170,34 @@
 
     <!-- PREVIEW -->
     <section class="preview-section">
-
       <div class="section-heading">
-
         <div>
-          <span class="section-kicker">PREVIEW</span>
-          <h2>Watch this title</h2>
+          <span class="section-kicker">OFFICIAL TRAILER</span>
+          <h2>{{ movie.title }} Trailer</h2>
         </div>
-
       </div>
 
-      <div
+<div
         class="preview-card"
         [style.background-image]="
-          'linear-gradient(90deg, rgba(5, 8, 24, 0.96), rgba(5, 8, 24, 0.42)), url(' + getBackdropUrl() + ')'
+          'linear-gradient(90deg, rgba(5, 8, 24, 0.96), rgba(5, 8, 24, 0.42)), url(' + getPreviewImageUrl() + ')'
         "
       >
 
         <div class="preview-content">
 
-          <div class="preview-play">
+          <a class="preview-play" [routerLink]="['/watch', movie.id]" [attr.aria-label]="'Watch ' + movie.title">
             ▶
-          </div>
+          </a>
 
           <div>
 
             <span class="preview-label">
-              MOLI PREVIEW
+              OFFICIAL TRAILER
             </span>
 
             <h3>
-              Ready to watch {{ movie.title }}?
+              {{ movie.title }} Trailer
             </h3>
 
             <p>
@@ -207,8 +217,7 @@
 
       </div>
 
-    </section>
-
+        </section>
 
     <!-- ABOUT -->
     <section class="about-section">
@@ -262,7 +271,11 @@
           </span>
 
           <strong>
-            {{ movie.genre }}
+            <a
+              class="movie-genre-link"
+              [routerLink]="['/categories']"
+              [queryParams]="{ genre: movie.genre }"
+            >{{ movie.genre }}</a>
           </strong>
 
         </div>

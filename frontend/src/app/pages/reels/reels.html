@@ -32,7 +32,7 @@
   </div>
 </div>
 
-<div class="reels-feed">
+<div class="reels-feed" #reelsFeed (scroll)="handleFeedScroll()">
 
   @for (reel of reels; track reel.id) {
 
@@ -142,7 +142,7 @@
 
             <a
               class="watch-movie-btn"
-              [routerLink]="['/movies', reel.movie.id]"
+              [routerLink]="['/categories', reel.movie.id]"
               (click)="$event.stopPropagation()"
             >
               Watch Movie

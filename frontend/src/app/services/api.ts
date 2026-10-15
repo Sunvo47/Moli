@@ -8,6 +8,8 @@ title: string;
 description: string;
 poster: string;
 backdrop?: string;
+previewImage?: string | null;
+trailerUrl?: string | null;
 type: string;
 genre: string;
 duration: number;

@@ -1262,3 +1262,225 @@ border-color: #c7d8df;
 border-top-color: #7c3aed;
 
 }
+
+
+/* Liked Movies pagination */
+.library-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 28px auto 8px;
+}
+
+.library-page-btn {
+  min-width: 40px;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid rgba(169, 112, 255, 0.4);
+  border-radius: 10px;
+  background: rgba(169, 112, 255, 0.08);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.library-page-btn:hover:not(:disabled),
+.library-page-btn.active {
+  background: #a970ff;
+  border-color: #a970ff;
+  color: #fff;
+}
+
+.library-page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.library-pagination-summary {
+  margin: 8px 0 0;
+  text-align: center;
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+:host-context(body.light-mode) .library-page-btn {
+  color: #263746;
+  border-color: #c7d8df;
+  background: #f7f1e3;
+}
+
+:host-context(body.light-mode) .library-page-btn:hover:not(:disabled),
+:host-context(body.light-mode) .library-page-btn.active {
+  background: #7c3aed;
+  border-color: #7c3aed;
+  color: #fff;
+}
+
+
+/* Compact multi-column layout for Rentals and Watch History */
+.library-page .rental-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 14px;
+}
+
+.library-page .rental-card {
+  min-width: 0;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 10px;
+}
+
+.library-page .rental-poster {
+  flex: 0 0 68px;
+  width: 68px;
+  height: 98px;
+}
+
+.library-page .rental-top {
+  gap: 8px;
+}
+
+.library-page .rental-top h3 {
+  font-size: 14px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.library-page .rental-details {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 7px;
+  margin-top: 12px;
+}
+
+.library-page .rental-details div {
+  gap: 2px;
+  overflow-wrap: anywhere;
+  font-size: 10px;
+}
+
+.library-page .detail-label {
+  font-size: 9px;
+}
+
+.library-page .rental-actions {
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.library-page .rental-actions .primary-button,
+.library-page .rental-actions .secondary-button {
+  min-height: 34px;
+  padding: 0 10px;
+  font-size: 10px;
+}
+
+.library-page .history-list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 12px;
+}
+
+.library-page .history-card {
+  min-width: 0;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px;
+}
+
+.library-page .history-poster {
+  flex: 0 0 48px;
+  width: 48px;
+  height: 70px;
+}
+
+.library-page .history-content h3 {
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.library-page .history-content .movie-meta {
+  flex-wrap: wrap;
+  gap: 4px;
+  font-size: 10px;
+}
+
+.library-page .watched-time {
+  margin-top: 8px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+  font-size: 10px;
+}
+
+.library-page .history-arrow {
+  padding: 0;
+  font-size: 20px;
+}
+
+@media (max-width: 1100px) {
+  .library-page .rental-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .library-page .history-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .library-page .rental-list,
+  .library-page .history-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+  }
+
+  .library-page .rental-card {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .library-page .rental-poster {
+    flex: none;
+    width: 62px;
+    height: 90px;
+  }
+
+  .library-page .rental-top {
+    flex-direction: column;
+  }
+
+  .library-page .rental-status {
+    align-self: flex-start;
+  }
+
+  .library-page .history-card {
+    flex-direction: column;
+  }
+
+  .library-page .history-poster {
+    flex: none;
+    width: 58px;
+    height: 82px;
+  }
+
+  .library-page .history-arrow {
+    display: none;
+  }
+
+  .library-page .library-page-btn {
+    min-width: 34px;
+    height: 34px;
+    padding: 0 9px;
+  }
+}

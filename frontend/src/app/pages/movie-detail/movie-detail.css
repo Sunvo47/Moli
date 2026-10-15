@@ -915,3 +915,67 @@ grid-template-columns: 1fr;
 font-size: 18px;
 }
 }
+
+
+/* Clickable genre link */
+.movie-genre-link {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.movie-genre-link:hover {
+  color: #a970ff;
+  text-decoration: underline;
+}
+
+/* Make the genre badge more readable */
+.movie-type {
+  font-size: 15px;
+  font-weight: 800;
+  padding: 5px 12px;
+  line-height: 1.4;
+}
+
+
+/* Embedded YouTube trailer */
+.trailer-player {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border: 1px solid rgba(169,112,255,.24);
+  border-radius: 14px;
+  background: #000;
+  box-shadow: 0 20px 50px rgba(0,0,0,.2);
+}
+.trailer-player iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+
+.rental-countdown {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 18px;
+  border: 1px solid rgba(169, 112, 255, 0.5);
+  border-radius: 12px;
+  background: rgba(169, 112, 255, 0.12);
+  color: #fff;
+  min-width: 190px;
+}
+
+.rental-countdown-label {
+  color: #cdb3ff;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.rental-countdown strong {
+  font-size: 1.05rem;
+  line-height: 1.4;
+}

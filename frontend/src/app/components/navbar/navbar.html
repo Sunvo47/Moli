@@ -6,6 +6,72 @@
     MOLI
   </a>
 
+  <!-- Expandable Mobile Search -->
+  <div class="mobile-search" [class.mobile-search-open]="isMobileSearchOpen">
+    @if (!isMobileSearchOpen) {
+      <button
+        type="button"
+        class="mobile-search-trigger"
+        aria-label="Open movie search"
+        (click)="toggleMobileSearch()"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle>
+          <path d="m16 16 4 4"></path>
+        </svg>
+      </button>
+    } @else {
+      <span class="mobile-search-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="7"></circle>
+          <path d="m16 16 4 4"></path>
+        </svg>
+      </span>
+      <input
+        type="search"
+        aria-label="Search movies"
+        placeholder="Search movies..."
+        [(ngModel)]="mobileSearchText"
+        autocomplete="off"
+      />
+      <button type="button" class="mobile-search-clear" aria-label="Close search" (click)="closeMobileSearch()">×</button>
+    }
+
+    @if (isMobileSearchOpen && mobileSearchText.trim()) {
+      <div class="mobile-search-results">
+        @for (movie of filteredMobileSearchResults; track movie.id) {
+          <a class="mobile-search-result" [routerLink]="['/categories', movie.id]" (click)="closeMobileSearch()">
+            <img [src]="movie.poster" [alt]="movie.title" />
+            <span class="mobile-search-result-info">
+              <strong>{{ movie.title }}</strong>
+              <small>{{ movie.genre }} · {{ movie.type }}</small>
+            </span>
+            <span class="mobile-search-result-arrow">›</span>
+          </a>
+        }
+        @if (filteredMobileSearchResults.length === 0) {
+          <p class="mobile-search-empty">No matching movies found.</p>
+        }
+      </div>
+    }
+  </div>
+
+  <button
+    type="button"
+    class="mobile-menu-toggle"
+    (click)="toggleMobileMenu()"
+    [attr.aria-expanded]="isMobileMenuOpen"
+    aria-label="Toggle navigation menu"
+  >
+    @if (isMobileMenuOpen) {
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"></path></svg>
+    } @else {
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
+    }
+  </button>
+
+  <div class="mobile-menu-panel" [class.mobile-open]="isMobileMenuOpen">
+
   <!-- Main Navigation -->
 
   <div class="nav-links">
@@ -28,12 +94,12 @@
 
 <!-- Movies -->
 <a
-  routerLink="/movies"
+  routerLink="/categories"
   routerLinkActive="active"
   class="nav-item"
-  aria-label="Movies"
+  aria-label="Categories"
 >
-  <span class="nav-label">Movies</span>
+  <span class="nav-label">Categories</span>
   <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
     <rect width="18" height="18" x="3" y="3" rx="2"></rect>
     <path d="M7 3v18"></path>
@@ -231,8 +297,18 @@
     Login
   </a>
 
+  <a
+    routerLink="/register"
+    routerLinkActive="active"
+    class="register-button"
+  >
+    Register
+  </a>
+
+
 }
 
   </div>
 
+  </div>
 </nav>

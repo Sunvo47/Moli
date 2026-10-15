@@ -20,7 +20,29 @@
       placeholder="Search movies..."
       autocomplete="off"
     >
-  </div>
+
+      @if (searchText.trim()) {
+        <div class="category-search-results">
+          @for (movie of filteredSearchResults; track movie.id) {
+            <a
+              class="category-search-result"
+              [routerLink]="['/movies', movie.id]"
+              (click)="searchText = ''"
+            >
+              <img [src]="getImageUrl(movie.poster)" [alt]="movie.title">
+              <span class="category-search-result-info">
+                <strong>{{ movie.title }}</strong>
+                <small>{{ movie.genre }} · {{ movie.type }}</small>
+              </span>
+              <span class="category-search-result-arrow">›</span>
+            </a>
+          }
+          @if (filteredSearchResults.length === 0) {
+            <p class="category-search-empty">No matching movies found.</p>
+          }
+        </div>
+      }
+</div>
 
   <button
     type="submit"
@@ -148,7 +170,7 @@
 
   <div class="movie-grid">
 
-    @for (movie of movies; track movie.id) {
+    @for (movie of paginatedMovies; track movie.id) {
 
       <a
         class="movie-card"
@@ -252,6 +274,21 @@
     }
 
   </div>
+
+  @if (totalPages > 1) {
+    <nav class="pagination" aria-label="Movie pages">
+      <button type="button" [disabled]="currentPage === 1"
+        (click)="setPage(currentPage - 1)">‹</button>
+      @for (page of pageNumbers; track page) {
+        <button type="button"
+          [class.active]="page === currentPage"
+          [attr.aria-current]="page === currentPage ? 'page' : null"
+          (click)="setPage(page)">{{ page }}</button>
+      }
+      <button type="button" [disabled]="currentPage === totalPages"
+        (click)="setPage(currentPage + 1)">›</button>
+    </nav>
+  }
 
 </section>
 }
