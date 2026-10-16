@@ -12,12 +12,16 @@
 ========================= */
 
 .hero {
-  min-height: 620px;
+  width: min(1440px, calc(100% - 32px));
+  min-height: calc(100vh - 106px);
+  margin: 12px auto 0;
   display: flex;
   align-items: center;
   background-size: cover;
   background-position: center;
   position: relative;
+  border-radius: 20px;
+  overflow: hidden;
 }
 
 .hero::after {
@@ -43,7 +47,7 @@
 .hero-description,
 .hero .eyebrow {
   color: #ffffff;
-  text-shadow: 0 2px 8px #000000, 0 0 18px rgba(0, 0, 0, 0.85);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
 }
 
 .hero-description {
@@ -119,7 +123,7 @@
   font-size: 16px;
   font-weight: 500;
   line-height: 1.7;
-  text-shadow: 0 2px 6px #000000, 0 0 14px rgba(0, 0, 0, 0.9);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.65);
 }
 
 .hero-actions {
@@ -675,15 +679,15 @@
 .home-search {
   position: relative;
   z-index: 5;
-  width: min(100% - 48px, 1080px);
+  width: min(1200px, calc(100% - 48px));
   margin: 0 auto;
-  padding: 28px 0 52px;
+  padding: 28px 0 0;
 }
 
 .home-search-inner {
   position: relative;
   width: min(100%, 560px);
-  margin: 0 auto;
+  margin: 0;
 }
 
 .home-search-inner > label {
@@ -755,6 +759,7 @@
 
 .home-search-results {
   position: absolute;
+  z-index: 100;
   top: calc(100% + 9px);
   left: 0;
   right: 0;
@@ -825,11 +830,7 @@
   font-size: 14px;
 }
 
-@media (max-width: 700px) {
-  .home-search {
-    display: none;
-  }
-}
+
 
 /* Improve banner text readability in both themes */
 .hero-content {
@@ -1037,4 +1038,274 @@
 @media (max-width: 600px) {
   .trailer-modal { padding: 10px; }
   .trailer-btn { min-height: 44px; padding: 0 15px; font-size: 13px; }
+}
+
+
+/* Home layout refinements */
+:host-context(body.light-mode) .hero::after {
+  background: linear-gradient(
+    0deg,
+    rgba(8, 13, 29, .22) 0%,
+    transparent 32%
+  );
+}
+
+@media (max-width: 900px) {
+  .hero,
+  .home-search {
+    width: calc(100% - 40px);
+  }
+}
+
+@media (max-width: 600px) {
+  .hero {
+    width: calc(100% - 28px);
+    margin-top: 14px;
+    border-radius: 18px;
+  }
+
+  .home-search {
+    width: calc(100% - 28px);
+    padding-top: 20px;
+  }
+}
+
+@media (max-width: 380px) {
+  .hero,
+  .home-search {
+    width: calc(100% - 24px);
+  }
+}
+
+/* Moli Home visual refinements v3 */
+
+/* เว้นระยะจาก Navbar และรักษาพื้นที่แสดงภาพ */
+.home-page .hero {
+  margin-top: 25px;
+  width: min(1440px, calc(100% - 24px));
+}
+
+@media (min-width: 601px) {
+  .home-page .hero {
+    min-height: calc(100vh - 119px);
+  }
+}
+
+@media (max-width: 600px) {
+  .home-page .hero {
+    width: calc(100% - 24px);
+    margin-top: 25px;
+  }
+}
+
+/* ปิดเงาข้อความที่มาจากกฎ CSS เก่าซึ่งมี !important */
+.home-page .hero .hero-content,
+.home-page .hero .hero-content h1,
+.home-page .hero .hero-content .hero-meta,
+.home-page .hero .hero-content .hero-tags,
+.home-page .hero .hero-content .hero-description,
+.home-page .hero .hero-content .eyebrow {
+  text-shadow: none !important;
+}
+
+/* เอาปื้นดำหลังคำอธิบายออก */
+.home-page .hero .hero-content .hero-description {
+  background: transparent !important;
+  padding: 0 !important;
+  margin-left: 0;
+}
+
+/* เอาวงแสงม่วงด้านใน Search ตอนโฟกัสออก */
+.home-search-input-wrap:focus-within {
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.14);
+}
+
+/* Center Home Search without restoring the purple focus glow */
+.home-page .home-search {
+  display: flex;
+  justify-content: center;
+  width: min(1200px, calc(100% - 48px));
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.home-page .home-search-inner {
+  width: min(760px, 100%);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.home-page .home-search-input-wrap:focus-within {
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.14);
+}
+
+/* Home Search: persistent soft blue shadow in dark mode */
+.home-page .home-search-inner {
+  box-shadow: 0 0 12px rgba(80, 165, 255, 0.22);
+  transition: box-shadow 0.2s ease;
+}
+
+.home-page .home-search-inner:hover,
+.home-page .home-search-inner:focus-within {
+  box-shadow: 0 0 16px rgba(80, 165, 255, 0.30);
+}
+
+/* Keep the input focus glow disabled */
+.home-page .home-search-input-wrap:focus-within {
+  box-shadow: none;
+}
+
+/* Disable the blue shadow in light mode */
+:host-context(body.light-mode) .home-page .home-search-inner,
+:host-context(body.light-mode) .home-page .home-search-inner:hover,
+:host-context(body.light-mode) .home-page .home-search-inner:focus-within {
+  box-shadow: none;
+}
+
+/* Hide duplicate Home Search on mobile; keep Navbar Search */
+@media (max-width: 600px) {
+  .home-page .home-search {
+    display: none !important;
+  }
+}
+
+
+/* Home Search: light travels inside the frame only */
+.home-page .home-search-inner {
+  position: relative;
+  isolation: isolate;
+  overflow: visible;
+  box-shadow: 0 0 12px rgba(80, 165, 255, 0.22);
+  transition: box-shadow 0.2s ease;
+}
+
+.home-page .home-search-inner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 0;
+  padding: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    transparent 35%,
+    rgba(105, 195, 255, 0.95) 50%,
+    transparent 65%,
+    transparent 100%
+  );
+  background-size: 250% 100%;
+  background-position: 100% 0;
+  pointer-events: none;
+  animation: home-search-light-sweep 3.2s linear infinite;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+@keyframes home-search-light-sweep {
+  to {
+    background-position: 0 0;
+  }
+}
+
+.home-page .home-search-inner:hover,
+.home-page .home-search-inner:focus-within {
+  box-shadow: 0 0 16px rgba(80, 165, 255, 0.30);
+}
+
+:host-context(body.light-mode) .home-page .home-search-inner {
+  box-shadow: 0 0 12px rgba(169, 112, 255, 0.22);
+}
+
+:host-context(body.light-mode) .home-page .home-search-inner::after {
+  display: block;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    transparent 35%,
+    rgba(199, 125, 255, 0.98) 50%,
+    transparent 65%,
+    transparent 100%
+  );
+  background-size: 250% 100%;
+  animation: home-search-light-sweep 3.2s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trending-track {
+    animation: none;
+  }
+}
+
+/* Home Search: keep results above following sections */
+.home-page .home-search {
+  position: relative;
+  z-index: 20;
+}
+
+.home-page .home-search-icon {
+  appearance: none;
+  -webkit-appearance: none;
+  flex: 0 0 auto;
+  width: 28px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #c77dff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-page .home-search-icon svg {
+  display: block;
+  width: 23px;
+  height: 23px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 3px #c77dff) drop-shadow(0 0 7px rgba(168, 85, 247, .85));
+}
+
+.home-page .home-search-icon:hover,
+.home-page .home-search-icon:focus-visible {
+  color: #e2baff;
+  outline: none;
+}
+
+.home-page .home-search-icon:focus-visible svg {
+  filter: drop-shadow(0 0 4px #e2baff) drop-shadow(0 0 9px rgba(168, 85, 247, .95));
+}
+
+/* Home Search: transparent background + purple neon search icon */
+.home-page .home-search-icon {
+  color: #c77dff !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  text-shadow:
+    0 0 4px rgba(199, 125, 255, 0.95),
+    0 0 9px rgba(169, 80, 255, 0.85),
+    0 0 16px rgba(145, 55, 255, 0.65);
+  transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
+.home-page .home-search-icon:hover,
+.home-page .home-search-icon:focus-visible {
+  color: #e2baff !important;
+  text-shadow:
+    0 0 5px rgba(226, 186, 255, 1),
+    0 0 12px rgba(184, 107, 255, 0.95),
+    0 0 22px rgba(145, 55, 255, 0.8);
 }

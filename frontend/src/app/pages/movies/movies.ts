@@ -67,7 +67,7 @@ get filteredSearchResults(): Movie[] {
 selectedGenre = 'All';
 selectedType = 'All';
 genres: string[] = [];
-types: string[] = ['All', 'MOVIE', 'SERIES', 'ANIME'];
+types: string[] = ['All', 'MOVIE', 'SERIES'];
 loading = true;
 error = '';
 likeLoadingIds = new Set<number>();
@@ -102,20 +102,34 @@ this.api.getMovies().pipe(timeout(10000)).subscribe({
     ];
 
     const requestedGenre = this.route.snapshot.queryParamMap.get('genre')?.trim();
+const requestedType = this.route.snapshot.queryParamMap.get('type')?.trim();
 
-if (requestedGenre) {
-  const matchingGenre = this.genres.find(
-    genre => genre.toLowerCase() === requestedGenre.toLowerCase()
-  );
+const matchingGenre = requestedGenre
+  ? this.genres.find(
+      genre => genre.toLowerCase() === requestedGenre.toLowerCase()
+    )
+  : undefined;
 
-  if (matchingGenre) {
-    this.selectedGenre = matchingGenre;
-    this.applyFilters();
-    return;
-  }
+const matchingType = requestedType
+  ? this.types.find(
+      type => type.toLowerCase() === requestedType.toLowerCase()
+    )
+  : undefined;
+
+if (matchingGenre) {
+  this.selectedGenre = matchingGenre;
 }
 
-    this.loadLikedMovies();
+if (matchingType) {
+  this.selectedType = matchingType;
+}
+
+if (matchingGenre || matchingType) {
+  this.applyFilters();
+  return;
+}
+
+this.loadLikedMovies();
 
     this.loading = false;
     this.cdr.detectChanges();
@@ -198,7 +212,7 @@ this.selectedType = 'All';
 
 this.router.navigate([], {
   relativeTo: this.route,
-  queryParams: { genre: null },
+  queryParams: { genre: null, type: null },
   queryParamsHandling: 'merge',
   replaceUrl: true
 }).then(() => {

@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { DecimalPipe } from '@angular/common';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { DecimalPipe, Location } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ApiService, Movie } from '../../services/api';
 
@@ -25,6 +25,8 @@ export class MovieDetail implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
+    private location: Location,
     private api: ApiService,
     private cdr: ChangeDetectorRef,
     private sanitizer: DomSanitizer
@@ -172,6 +174,18 @@ export class MovieDetail implements OnInit, OnDestroy {
     if (hours > 0) return `${hours} ชม. ${minutes} นาที`;
     if (minutes > 0) return `${minutes} นาที ${seconds} วินาที`;
     return `${seconds} วินาที`;
+  }
+
+  goBack(event: Event): void {
+    event.preventDefault();
+
+    const navigationId = Number(window.history.state?.navigationId ?? 0);
+
+    if (navigationId > 1) {
+      this.location.back();
+    } else {
+      this.router.navigate(['/categories']);
+    }
   }
 
   ngOnDestroy(): void {

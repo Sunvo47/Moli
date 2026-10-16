@@ -1,7 +1,7 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ApiService, Movie } from '../../services/api';
 
@@ -51,12 +51,14 @@ export class Home implements OnInit {
   constructor(
     private api: ApiService,
     private cdr: ChangeDetectorRef,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.loadMovies();
   }
+
 
   loadMovies(): void {
     this.loading = true;
@@ -101,6 +103,17 @@ export class Home implements OnInit {
     });
   }
 
+
+  openFirstSearchResult(): void {
+    const movie = this.filteredSearchResults[0];
+
+    if (!movie) {
+      return;
+    }
+
+    this.searchText = '';
+    this.router.navigate(['/categories', movie.id]);
+  }
 
   openTrailer(movie: Movie): void {
     if (movie.trailerUrl) {

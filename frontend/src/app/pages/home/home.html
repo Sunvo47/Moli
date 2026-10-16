@@ -1,53 +1,6 @@
 <section class="home-page">
 
-  <section class="home-search" aria-label="Search movies">
-    <div class="home-search-inner">
-
-
-      <div class="home-search-input-wrap">
-        <span class="home-search-icon" aria-hidden="true">⌕</span>
-        <input
-          id="home-movie-search"
-          name="homeMovieSearch"
-          type="search"
-          [(ngModel)]="searchText"
-          placeholder="Search titles, genres, or types..."
-          autocomplete="off"
-        />
-        @if (searchText) {
-          <button
-            type="button"
-            class="home-search-clear"
-            aria-label="Clear search"
-            (click)="searchText = ''"
-          >×</button>
-        }
-      </div>
-
-      @if (searchText.trim()) {
-        <div class="home-search-results">
-          @for (movie of filteredSearchResults; track movie.id) {
-            <a
-              class="home-search-result"
-              [routerLink]="['/categories', movie.id]"
-              (click)="searchText = ''"
-            >
-              <img [src]="movie.poster" [alt]="movie.title" />
-              <span class="home-search-result-info">
-                <strong>{{ movie.title }}</strong>
-                <small>{{ movie.genre }} · {{ movie.type }}</small>
-              </span>
-              <span class="home-search-result-arrow">›</span>
-            </a>
-          }
-
-          @if (filteredSearchResults.length === 0) {
-            <p class="home-search-empty">No matching movies found.</p>
-          }
-        </div>
-      }
-    </div>
-  </section>
+  
 
 
   @if (loading) {
@@ -114,6 +67,55 @@
 
       </div>
     </section>
+
+  <section class="home-search" aria-label="Search movies">
+    <div class="home-search-inner">
+
+
+      <div class="home-search-input-wrap">
+        
+        <input
+          id="home-movie-search"
+          name="homeMovieSearch"
+          type="search"
+          [(ngModel)]="searchText"
+          placeholder="Search titles, genres, or types..."
+          autocomplete="off"
+        />
+        @if (searchText) {
+          <button
+            type="button"
+            class="home-search-clear"
+            aria-label="Clear search"
+            (click)="searchText = ''"
+          >×</button>
+        }
+      </div>
+
+      @if (searchText.trim()) {
+        <div class="home-search-results">
+          @for (movie of filteredSearchResults; track movie.id) {
+            <a
+              class="home-search-result"
+              [routerLink]="['/categories', movie.id]"
+              (click)="searchText = ''"
+            >
+              <img [src]="movie.poster" [alt]="movie.title" />
+              <span class="home-search-result-info">
+                <strong>{{ movie.title }}</strong>
+                <small>{{ movie.genre }} · {{ movie.type }}</small>
+              </span>
+              <span class="home-search-result-arrow">›</span>
+            </a>
+          }
+
+          @if (filteredSearchResults.length === 0) {
+            <p class="home-search-empty">No matching movies found.</p>
+          }
+        </div>
+      }
+    </div>
+  </section>
 
     <!-- Trending Now -->
     <section class="movie-section trending-section">

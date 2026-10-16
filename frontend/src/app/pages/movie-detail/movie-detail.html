@@ -10,8 +10,8 @@
 
   <p>{{ error }}</p>
 
-  <a routerLink="/categories" class="back-btn">
-    Back to Categories
+  <a href="" (click)="goBack($event)" class="back-btn">
+    Back
   </a>
 </div>
 
@@ -31,9 +31,9 @@
 
   <div class="hero-content">
 
-    <a routerLink="/categories" class="back-link">
+    <a href="" (click)="goBack($event)" class="back-link">
       <span>←</span>
-      Back to Categories
+      Back
     </a>
 
     <h1>{{ movie.title }}</h1>
@@ -149,17 +149,33 @@
 
     </div>
 
-    <a
-      class="movie-type"
-      [routerLink]="['/categories']"
-      [queryParams]="{ genre: movie.genre }"
-    >
-      {{ movie.genre }}
-    </a>
-
     <div class="poster-caption">
       <span>Now watching</span>
       <strong>{{ movie.title }}</strong>
+    </div>
+
+    <div class="movie-meta-tags">
+      <div class="movie-meta-item">
+        <span class="movie-meta-label">GENRE</span>
+        <a
+          class="movie-genre-tag"
+          [routerLink]="['/categories']"
+          [queryParams]="{ genre: movie.genre }"
+        >
+          {{ movie.genre }}
+        </a>
+      </div>
+
+      <div class="movie-meta-item">
+        <span class="movie-meta-label">TYPE</span>
+        <a
+          class="movie-type"
+          [routerLink]="['/categories']"
+          [queryParams]="{ type: movie.type }"
+        >
+          {{ movie.type }}
+        </a>
+      </div>
     </div>
 
   </aside>
