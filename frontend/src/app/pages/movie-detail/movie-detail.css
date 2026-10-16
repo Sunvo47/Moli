@@ -998,3 +998,20 @@ font-size: 18px;
   font-size: 1.05rem;
   line-height: 1.4;
 }
+
+/* Fix: remove underline from genre links in all states */
+.detail-page a.movie-genre-link,
+.detail-page a.movie-genre-link:link,
+.detail-page a.movie-genre-link:visited,
+.detail-page a.movie-genre-link:hover,
+.detail-page a.movie-genre-link:focus,
+.detail-page a.movie-genre-link:active,
+.detail-page a.movie-type,
+.detail-page a.movie-type:link,
+.detail-page a.movie-type:visited,
+.detail-page a.movie-type:hover,
+.detail-page a.movie-type:focus,
+.detail-page a.movie-type:active {
+  text-decoration: none !important;
+  text-decoration-line: none !important;
+}
